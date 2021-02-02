@@ -1,0 +1,14 @@
+{
+  "name": "photo-classification",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Ximu-Tao",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^11.2.1"
+  }
+}

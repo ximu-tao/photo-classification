@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>PhotoClassification</title>
+    <style>
+        @import url(./css/css.css);
+
+    </style>
+</head>
+
+<body>
+    <div name='menu' id="menu">
+        <select id="config_file">
+        </select>
+        <span id="__loading__"></span>
+       
+    </div>
+    <div id="file_drag" class="file_drag_hidden"></div>
+    <div id="img_show">
+        <img id='img__' src="">
+    </div>
+
+    <div id="KeyList">
+        <table id="KeyListTable">
+            
+        </table>
+    </div>
+</body>
+<script>
+    const fs = require('fs')
+    const path = require('path')
+    const lib = require('./lib/lib')
+
+    var cutoverClassName = (element, name) => {
+        let r = new RegExp(name)
+        if (r.test(element.className)) {
+            element.className = element.className.replace(name, '')
+        } else {
+            element.className += ' ' + name
+        }
+    }
+
+</script>
+
+
+
+<script src="./src/classification.js"></script>
+
+<script src="./src/Table.js"></script>
+  
+<script src="./src/Img.js"></script>
+
+
+  
+<script src="./src/eve.js"></script>
+<script src="./src/FileDrag.js"></script>
+
+<script>
+    // document.addEventListener('click',
+    //     (e)=>{
+    //         console.log(e.target);
+            
+    //     }
+    // )
+    
+</script>
+
+
+</html>

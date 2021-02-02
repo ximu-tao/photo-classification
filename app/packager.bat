@@ -1,0 +1,1 @@
+electron-packager . Õº∆¨∑÷¿‡ --platform=win32 --arch=x64 --out=./out --asar --app-version=1.0.0 --overwrite --ignore=node_modules --extra-resource=./config.json --extra-resource=./use

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello World</title>
+    <script src="../../util/vue.js"></script>
+
+    <link rel="stylesheet" href="./index.css" media="all">
+
+</head>
+
+<body>
+    <div id="app" >
+        <file-drag v-if="!currentPath" @file-selected='onFileSelected'></file-drag>
+        <!-- <file-drag v-if="0" @file-selected='onFileSelected'></file-drag> -->
+
+        <image-classifier-container 
+            v-if="currentPath"
+            :current-path='currentPath'
+            :keymap='currentKeymap.keymap'
+            @queueempty='onQueueEmpty'
+        ></image-classifier-container>
+
+        <keymap-container
+            class="keymap-container"
+            v-if="currentPath" 
+            :current-keymap="currentKeymap"
+            :can_edit='false'
+            :keymap-list='keymapList'
+            @change='onChange'
+            @keymapedit='onKeymapedit'
+            @switchconfig='onSwitchConfig'
+            >
+        </keymap-container>
+
+    </div>
+</body>
+<script src="index.js"></script>
+</html>

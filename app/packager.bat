@@ -1,1 +1,1 @@
-electron-packager . 图片分类 --platform=win32 --arch=x64 --out=./out --asar --app-version=1.0.0 --overwrite --ignore=node_modules --extra-resource=./config.json --extra-resource=./use
+electron-packager . 图片分类 --platform=win32 --arch=x64 --out=./out --overwrite --ignore=node_modules

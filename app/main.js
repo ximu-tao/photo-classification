@@ -18,7 +18,7 @@ app.on('ready',
         )
 
         mainWindows.loadFile('./page/index/index.html')
-        Menu.setApplicationMenu(null);
+        // Menu.setApplicationMenu(null);
         mainWindows.on('closed',
             () => {
                 mainWindows = null;

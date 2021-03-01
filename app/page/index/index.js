@@ -87,6 +87,8 @@ Vue.component(
 
                 default: true,
             }
+            , 'isMinimize' : Boolean
+            
         },
         data: function () {
             return {
@@ -106,23 +108,33 @@ Vue.component(
 
         },
 
+        // keymap-container 部分 用 v-if 时,切换显示时有明显卡顿 所以使用 v-show 了
         template: `
+       <div class='keymap-father'>
+        <div class="minimize-container" v-if='isMinimize'>
+            <input type='button' @click='switchMinimize' value='展开'>
+        </div>
+
         <div
+        v-show='!isMinimize'
+        class='keymap-container'
         :class="{ 'keymap-container-canedit': canedit , 'keymap-container-unedit': !canedit }"
         >
-        <select 
-            @change='switchConfig' 
-            v-model='selectedConfigIndex'
-            >
-            <option disabled selected= "selected" value="">请选择</option>
-            <option 
-                v-for='( e , i ) in keymapList' 
-                :value='i' >
-                {{ e.configName }}</option>
+            <select 
+                @change='switchConfig' 
+                v-model='selectedConfigIndex'
+                >
+                <option disabled selected= "selected" value="">请选择</option>
+                <option 
+                    v-for='( e , i ) in keymapList' 
+                    :value='i' >
+                    {{ e.configName }}</option>
 
-        </select>
-           <table class='keymap-table'>
-                <tr><th>按键</th><th>目录</th>
+            </select>
+            <button @click='switchMinimize'>缩小</button>
+
+            <table class='keymap-table'>
+                <tr><th><kbd>按键</kbd></th><th>目录</th>
                 </tr>
                 <tr 
                     is='input-tr' 
@@ -144,6 +156,7 @@ Vue.component(
                 </tr>
 
            </table>
+        </div>
         </div>`,
         methods: {
             init: function () {
@@ -152,6 +165,10 @@ Vue.component(
                 this.canedit = this.can_edit;
 
                 // console.log(this.keymapList);
+            }
+
+            , switchMinimize : function(){
+                this.$emit('switchminimize');
             }
 
             , onChange: function (_pathkey_, _img2path_) {
@@ -238,9 +255,10 @@ Vue.component(
             }
 
             , onChange: function (e) {
-                // TODO : 在这里验证路径是否合法
+                //  : 在这里验证路径是否合法
 
-                if (!fs.existsSync(e.target.value)) {
+                // 改了下判断条件, 现在目标路径可以为空了 (当然按对应按键时没有反应)
+                if (!fs.existsSync(e.target.value) && e.target.value !== '') {
                     this.styleObj.backgroundColor = 'red'
 
                 } else {
@@ -328,7 +346,13 @@ Vue.component(
             files_list = files_list.filter(
                 function (item) {
                     return (
-                        ['.jpg', '.png', '.jpeg', '.gif'].indexOf(path.extname(item).toLowerCase()) != -1
+                        // 增加了一些支持的图片类型
+                        ['.jpg', '.png', '.jpeg'
+                        , '.gif', '.webp' , '.apng' 
+                        , '.bmp' , '.ico', '.cur' , 
+                        '.jfif', '.pjpeg', '.pjp'
+                        , '.svg']
+                        .indexOf(path.extname(item).toLowerCase()) != -1
                         && fs.existsSync(item)
                         && !isDir(item))
                 }
@@ -344,8 +368,9 @@ Vue.component(
             this.currentImgIndex %= this.img_queue.length;
         }
         , previousImg: function () {
-            //  : 切换下一张图片
-            this.currentImgIndex -= 1;
+            //  : 切换上一张图片
+            this.currentImgIndex += (this.img_queue.length - 1);
+            // console.log( this.currentImgIndex );
             this.currentImgIndex %= this.img_queue.length;
         }
         , moveImg: function (oldImgIndex, newPath) {
@@ -355,6 +380,9 @@ Vue.component(
 
                 this.moved_stack.push(newPath);
                 this.img_queue.splice(oldImgIndex, 1);
+
+                // 倒数第一张图片移动文件后无法正常显示第一张图片
+                this.currentImgIndex %= this.img_queue.length;
             } catch (err) {
                 throw err;
 
@@ -372,17 +400,33 @@ Vue.component(
             // console.log( this.keymap[e.key] );
 
             if (e.ctrlKey) {
-                this.controlKeyFun[e.keyCode]()
-            } else if (this.keymap[e.key]) {
-                this.moveImg(
-                    this.currentImgIndex,
-                    path.join(this.keymap[e.key],
-                        path.basename( this.currentImgPath)
-                    )
-                )
+                // console.log(e.keyCode );
 
+                // console.log(this.controlKeyFun[e.key]);
+                try {
+                    this.controlKeyFun[e.key]()
+                } catch (err) {
+                    console.log(err);
+                }
             } else {
-                this.switchImg[e.keyCode]();
+
+                if (this.keymap[e.key]) {
+                    this.moveImg(
+                        this.currentImgIndex,
+                        path.join(this.keymap[e.key],
+                            path.basename(this.currentImgPath)
+                        )
+                    )
+                } else {
+                    try {
+                        this.switchImg[e.keyCode]();
+                        // console.log( this.currentImgIndex );
+                    } catch (error) {
+                        console.log(error);
+                    }
+                }
+
+
             }
         }
 
@@ -397,7 +441,18 @@ Vue.component(
             // console.log( '鼠标侧键' );
         }
         , undo: function () {
-            // TODO : 撤销文件移动
+            //  : 撤销文件移动
+            let src_path = this.moved_stack.pop();
+
+            console.log(src_path);
+            let new_path = path.join(this.currentPath,
+                path.basename(src_path)
+            );
+            fs.renameSync(src_path, new_path);
+
+            this.img_queue.splice(this.currentImgIndex, 0, new_path);
+
+            // this.previousImg();
         }
 
     }
@@ -451,6 +506,8 @@ var app = new Vue(
 
             , 'currentPath': ""
             // 图片文件所在的路径
+
+            , 'is_keymap_containeris_minimize' : false
         }
 
         , methods: {
@@ -521,6 +578,10 @@ var app = new Vue(
             }
             , onQueueEmpty: function () {
                 this.currentPath = ""
+            }
+
+            , onSwitchMinimize : function(){
+                this.is_keymap_containeris_minimize = !this.is_keymap_containeris_minimize;
             }
         }
         , mounted() {

@@ -1,6 +1,7 @@
 * {
     margin: 0px;
     padding: 0px;
+    user-select: none;
 }
 
 body {
@@ -45,7 +46,7 @@ body {
 }
 
 .keymap-container{
-    
+    z-index: 100;
     top: 0px;
     left: 0px;
     height: 100%;
@@ -72,4 +73,12 @@ body {
     /* overflow: hidden; */
     background-color: #211f1f;
     
+}
+
+
+.minimize-container{
+    z-index: 100;
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
 }

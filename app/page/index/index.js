@@ -105,6 +105,7 @@ Vue.component(
             }
         },
         computed: {
+            
 
         },
 
@@ -158,6 +159,8 @@ Vue.component(
            </table>
         </div>
         </div>`,
+
+
         methods: {
             init: function () {
                 this.keymap_ = { ...this.currentKeymap.keymap };
@@ -192,6 +195,7 @@ Vue.component(
                 this.canedit = true;
             }
             , switchConfig: function () {
+                console.log( this.keymapName );
                 console.log(this.selectedConfigIndex);
                 this.$emit('switchconfig', this.selectedConfigIndex)
             }
@@ -375,6 +379,15 @@ Vue.component(
         }
         , moveImg: function (oldImgIndex, newPath) {
             //  : 移动图片的路径
+
+            console.log( newPath );
+
+            if (fs.existsSync(newPath) ) {
+                // 目标文件夹存在同名文件, 不执行移动操作
+                // TODO : 对用户的提示 ,
+                return ;
+            } 
+
             try {
                 fs.renameSync(this.img_queue[oldImgIndex], newPath)
 
@@ -409,7 +422,10 @@ Vue.component(
                     console.log(err);
                 }
             } else {
-
+                // console.log( app.currentKeymap );
+                // console.log( this.keymap );
+                // console.log( this.keymap[e.key] );
+                // console.log( e.key );
                 if (this.keymap[e.key]) {
                     this.moveImg(
                         this.currentImgIndex,
@@ -556,7 +572,7 @@ var app = new Vue(
                 }
             }
             , onChange: function (_pathkey_, _img2path_) {
-                app.currentKeymap.keymap[_pathkey_] = _img2path_;
+                this.currentKeymap.keymap[_pathkey_] = _img2path_;
             }
 
             , printKeymap: function () {
@@ -573,8 +589,12 @@ var app = new Vue(
 
             , onSwitchConfig: function (configIndex) {
                 // console.log( configIndex );
+                this.currentKeymap = this.keymapList[configIndex];
+                app.$refs.keymap_container_.currentKeymap = this.currentKeymap;
+                app.$refs.keymap_container_.init();
+                app.$refs.image_classifier_container_.keymap = this.currentKeymap.keymap;
 
-                this.currentKeymap = this.keymapList[configIndex]
+                // console.log( this.currentKeymap );
             }
             , onQueueEmpty: function () {
                 this.currentPath = ""

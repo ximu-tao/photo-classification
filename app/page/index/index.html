@@ -17,14 +17,16 @@
         <!-- <file-drag v-if="0" @file-selected='onFileSelected'></file-drag> -->
 
         <image-classifier-container 
+        ref="image_classifier_container_"
             v-if="currentPath"
+            
             :current-path='currentPath'
             :keymap='currentKeymap.keymap'
             @queueempty='onQueueEmpty'
         ></image-classifier-container>
 
         <keymap-container
-            
+            ref="keymap_container_"
             v-if="currentPath" 
             :current-keymap="currentKeymap"
             :can_edit='false'

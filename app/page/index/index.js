@@ -132,6 +132,7 @@ Vue.component(
                     {{ e.configName }}</option>
 
             </select>
+            <button @click='addConfig'>添加配置</button>
             <button @click='switchMinimize'>缩小</button>
 
             <table class='keymap-table'>
@@ -169,6 +170,29 @@ Vue.component(
 
                 // console.log(this.keymapList);
             }
+
+            ,addConfig(){
+                this.$emit("addconfig");
+            }
+
+            ,addConfiged( newConfigName ){
+                for (let i = this.keymapList.length-1; i >= 0 ; i--) {
+                    // console.log( this.keymapList[i].configName );
+                    if ( this.keymapList[i].configName === newConfigName ){
+                        this.selectedConfigIndex = i;
+                        break;
+                    }
+                }
+
+                // this.init();
+                this.switchConfig();
+
+                setTimeout(
+                    this.startEdit,
+                    100
+                );
+            }
+
 
             , switchMinimize : function(){
                 this.$emit('switchminimize');
@@ -500,7 +524,7 @@ var app = new Vue(
 
         , data: {
             'keymapTemplate': {
-                'configName': '默认',
+                'configName': 'newConfig',
                 'keymap': {
                     '0': '', '1': '', '2': '',
                     '3': '', '4': '', '5': '',
@@ -602,6 +626,15 @@ var app = new Vue(
 
             , onSwitchMinimize : function(){
                 this.is_keymap_containeris_minimize = !this.is_keymap_containeris_minimize;
+            }
+
+            , onAddConfig(){
+                this.keymapList.push( this.keymapTemplate );
+
+                // console.log( this.keymapList )
+
+                this.$refs.keymap_container_.addConfiged( this.keymapTemplate.configName );
+
             }
         }
         , mounted() {

@@ -12,35 +12,7 @@
 </head>
 
 <body>
-    <div id="app" >
-        <file-drag v-if="!currentPath" @file-selected='onFileSelected'></file-drag>
-        <!-- <file-drag v-if="0" @file-selected='onFileSelected'></file-drag> -->
-
-        <image-classifier-container 
-        ref="image_classifier_container_"
-            v-if="currentPath"
-            
-            :current-path='currentPath'
-            :keymap='currentKeymap.keymap'
-            @queueempty='onQueueEmpty'
-        ></image-classifier-container>
-
-        <keymap-container
-            ref="keymap_container_"
-            v-if="currentPath" 
-            :current-keymap="currentKeymap"
-            :can_edit='false'
-            :keymap-list='keymapList'
-            :is-minimize='is_keymap_containeris_minimize'
-            @addconfig="onAddConfig"
-            @switchminimize='onSwitchMinimize'
-            @change='onChange'
-            @keymapedit='onKeymapedit'
-            @switchconfig='onSwitchConfig'
-            >
-        </keymap-container>
-
-    </div>
+    <div id="app" ></div>
 </body>
-<script src="index.js"></script>
+<script src="index.js" type="module"></script>
 </html>

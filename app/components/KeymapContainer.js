@@ -46,6 +46,8 @@ export default {
         class='keymap-container'
         :class="{ 'keymap-container-canedit': canedit , 'keymap-container-unedit': !canedit }"
         >
+        <div v-show="!canedit">
+        
             <select 
                 @change='switchConfig' 
                 v-model='selectedConfigIndex'
@@ -60,10 +62,11 @@ export default {
             <button @click='addConfig'>添加配置</button>
             <button @click='switchMinimize'>缩小</button>
             
+        </div>
             <div v-show="addConfiging">
             方案名: <input type="text" v-model="editKeymapName" >
             
-</div>
+            </div>
             
             <table class='keymap-table'>
                 <tr><th><kbd>按键</kbd></th><th>目录</th>

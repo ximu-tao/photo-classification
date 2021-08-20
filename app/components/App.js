@@ -156,13 +156,10 @@ export default  {
     this.is_keymap_containeris_minimize = !this.is_keymap_containeris_minimize;
   }
 
-, onAddConfig(){
-    this.keymapList.push( this.keymapTemplate );
-
-    // console.log( this.keymapList )
-
-    this.$refs.keymap_container_.addConfiged( this.keymapTemplate.configName );
-
+, onAddConfig( configName , keymap ){
+    this.keymapList.push( { configName , keymap} );
+    this.$refs.keymap_container_.addConfiged(  this.keymapList.length );
+      this.setConfigFile()
   }
 }
 , mounted() {

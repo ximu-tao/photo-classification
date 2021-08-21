@@ -1,16 +1,15 @@
+import Store from "../store/index.js"
 
 const fs = require('fs');
 const path = require('path');
 
-import {isDir} from "../util/lib.js";
+import {isDir , rootPath} from "../util/lib.js";
 
-var __MyDIRNAME = path.join(
-  __dirname.replace("app.asar", ""), "../../"
-)
+var __MyDIRNAME = rootPath()
 console.log( __MyDIRNAME )
 export default  {
   el: "#app",
-
+  store : new Vuex.Store( Store ),
   template:
     `
   <div>
@@ -163,6 +162,7 @@ export default  {
   }
 }
 , mounted() {
+    this.$store.dispatch('init');
   // console.log(this.currentKeymap);
 
   this.init()

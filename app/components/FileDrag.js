@@ -27,6 +27,7 @@ export default {
     onDrop: function (e) {
       //  :  拖拽文件后执行
       // console.log('onDrop');
+      console.debug(e.dataTransfer.files[0]);
       this.fileSelected(e.dataTransfer.files[0].path);
     },
     selectFile: async function () {
@@ -46,6 +47,7 @@ export default {
     fileSelected: function (path) {
       //  : 获得路径后调用
       this.$emit('file-selected', path);
+      this.$store.dispatch('imgPath' , path );
     },
     onDragenter: function (e) {
       // : 拖拽文件进入后执行

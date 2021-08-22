@@ -47,16 +47,22 @@ export default {
         :class="{ 'keymap-container-canedit': canedit , 'keymap-container-unedit': !canedit }"
         >
         <div v-show="!canedit">
-        
+<!-- 
+使用临时变量无法在添加方案后切换到新的方案
+使用 v-model='$store.getters' 无法双绑
+使用 :values='$store.getters' 无法手动切换
+暂时这样用, 以后想办法改
+ -->
+<!--                @change='switchConfig'-->
+<!-- TODO : 💩 : 不建议直接使用 $store.state.__KeymapPointer , 想办法使用其他方法完成双绑 -->
             <select 
-                @change='switchConfig' 
-                v-model='selectedConfigIndex'
+                v-model='$store.state.__KeymapPointer'
                 >
                 <option disabled selected= "selected" value="">请选择</option>
                 <option 
-                    v-for='( e , i ) in keymapList' 
+                    v-for='( e , i ) in $store.getters.nameList' 
                     :value='i' >
-                    {{ e.configName }}</option>
+                    {{ e }}</option>
 
             </select>
             <button @click='addConfig'>添加配置</button>
@@ -71,12 +77,13 @@ export default {
             <table class='keymap-table'>
                 <tr><th><kbd>按键</kbd></th><th>目录</th>
                 </tr>
-                <tr 
+                <tr
                     v-show="!canedit"
                     is='input-tr' 
-                    v-for='(val, key, index) in keymap_'
+                    v-for='(val, key, index) in $store.getters.currentKeymap.keymap'
                     :img2path='val'
                     :keypath='key'
+                    :key="key"
                     :can_edit='canedit'
 
                     ></tr>
@@ -87,6 +94,7 @@ export default {
                     v-for='(val, key, index) in keymapEdit'
                     :img2path='val'
                     :keypath='key'
+                    :key="key"
                     :can_edit='canedit'
                     @change='onChange'
                     ></tr>
@@ -142,8 +150,11 @@ export default {
     },
 
     saveAddConfig(){
-        this.$emit("addconfig" , this.editKeymapName , this.keymapEdit );
+        // this.$emit("addconfig" , this.editKeymapName , this.keymapEdit );
 
+        this.$store.dispatch( 'addKeymap' , {
+          configName:this.editKeymapName, keymap:this.keymapEdit
+        } )
       this.addConfiging = false;
       this.canedit = false;
     }
@@ -178,7 +189,11 @@ export default {
       //  : 通知父组件 并将新的 keymap 传递
       this.canedit = false;
       // console.log(this.configName);
-      this.$emit('keymapedit', this.editKeymapName, this.keymapEdit)
+      // this.$emit('keymapedit', this.editKeymapName, this.keymapEdit)
+
+      this.$store.dispatch('setCurrentKeymap' , {
+        configName:this.editKeymapName, keymap:this.keymapEdit
+      } )
     }
     , startEdit: function () {
       this.keymapEdit = this.keymap_;
@@ -186,9 +201,10 @@ export default {
       this.canedit = true;
     }
     , switchConfig: function () {
-      console.log( this.keymapName );
-      console.log(this.selectedConfigIndex);
-      this.$emit('switchconfig', this.selectedConfigIndex)
+      // console.log( this.keymapName );
+      // console.log(this.selectedConfigIndex);
+      // this.$emit('switchconfig', this.selectedConfigIndex)
+      // this.$store.commit( 'switchConfig' , this.selectedConfigIndex )
     }
   }
   , created: function () {

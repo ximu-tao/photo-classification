@@ -56,12 +56,28 @@ export const readConfig = async ()=>{
 }
 
 /**
+ * 将新的配置信息保存至文件
+ * @param config
+ * @returns {Promise<void>}
+ */
+export const saveConfigToFile = async ( config )=>{
+  fs.writeFileSync(
+    __CONFIG_PATH
+    , JSON.stringify( config )
+  );
+}
+
+/**
  * 同步读取文件夹中的所有文件, 返回完整路径的文件列表
+ * 如果 _path 是一个文件, 则会读取同路径下的所有文件
  * @param _path
  * @returns {string[]}
  */
 export const listDir = (_path ) => {
-    let files_list = fs.readdirSync(_path);
+  if ( !isDir( _path ) ){
+    _path = path.dirname( _path );
+  }
+  let files_list = fs.readdirSync(_path);
     return files_list.map( v => path.join( _path , v ) );
 }
 
@@ -78,7 +94,28 @@ const supportedTypes = ['.jpg', '.png', '.jpeg', '.gif', '.webp' , '.apng', '.bm
  */
 export const checkType = ( fileName ) => {
   return !isDir(fileName) &&
-    supportedTypes.indexOf( path.extname(item).toLowerCase()) !== -1 &&
+    supportedTypes.indexOf( path.extname(fileName).toLowerCase()) !== -1 &&
     fs.existsSync(fileName)
 
+}
+
+/**
+ * 将文件移动到指定路径, 存在同名文件时会覆盖
+ * @param filePath
+ * @param newPath
+ */
+export const moveFileTo = ( filePath , newPath ) => {
+  let fileName = path.basename( filePath );
+  fs.renameSync( filePath , path.join( newPath , fileName )  );
+}
+
+/**
+ * 判断指定路径是否存在 fileName 的同名文件
+ * @param newPath
+ * @param fileName
+ */
+export const exists = ( newPath , fileName ) =>{
+  return fs.existsSync( path.join(
+    newPath , path.basename( fileName )
+  ) );
 }

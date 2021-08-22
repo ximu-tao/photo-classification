@@ -3,7 +3,7 @@
 const fs = require("fs");
 const path = require("path");
 
-import {isDir} from "../util/lib.js";
+import {isDir , moveFileTo , exists } from "../util/lib.js";
 
 export default {
 
@@ -59,7 +59,8 @@ export default {
             @keyup="onKeyUp"
             tabindex='-1'
             >
-            <img class="currentImg" v-show='isCurrentImg' :src="currentImgPath">
+<!--            <img class="currentImg" v-show='isCurrentImg' :src="currentImgPath">-->
+            <img class="currentImg" v-show='isCurrentImg' :src="$store.getters.currentImg">
             
         </div>
         `
@@ -100,12 +101,14 @@ export default {
       //  : 切换下一张图片
       this.currentImgIndex += 1;
       this.currentImgIndex %= this.img_queue.length;
+      this.$store.commit('nextImg');
     }
     , previousImg: function () {
       //  : 切换上一张图片
       this.currentImgIndex += (this.img_queue.length - 1);
       // console.log( this.currentImgIndex );
       this.currentImgIndex %= this.img_queue.length;
+      this.$store.commit('previousImg');
     }
     , moveImg: function (oldImgIndex, newPath) {
       //  : 移动图片的路径
@@ -122,7 +125,7 @@ export default {
         fs.renameSync(this.img_queue[oldImgIndex], newPath)
 
         this.moved_stack.push(newPath);
-        this.img_queue.splice(oldImgIndex, 1);
+        this.img_queue.splice( oldImgIndex, 1);
 
         // 倒数第一张图片移动文件后无法正常显示第一张图片
         this.currentImgIndex %= this.img_queue.length;
@@ -154,15 +157,25 @@ export default {
       } else {
         // console.log( app.currentKeymap );
         // console.log( this.keymap );
-        // console.log( this.keymap[e.key] );
-        // console.log( e.key );
-        if (this.keymap[e.key]) {
-          this.moveImg(
-            this.currentImgIndex,
-            path.join(this.keymap[e.key],
-              path.basename(this.currentImgPath)
-            )
-          )
+        console.log( e.key );
+        console.log( this.keymap[e.key] );
+        if ( this.$store.getters.currentKeymap.keymap[e.key]) {
+          console.debug( this.$store.getters.currentImg, `将被移动至` , this.$store.getters.currentKeymap.keymap[e.key] )
+
+          if ( !exists( this.$store.getters.currentKeymap.keymap[e.key] ,
+            this.$store.getters.currentImg
+            ) ) {
+            moveFileTo(  this.$store.getters.currentImg ,
+              this.$store.getters.currentKeymap.keymap[e.key]
+            );
+            this.$store.dispatch('popCurrent');
+
+          }else{
+            console.debug(  this.$store.getters.currentKeymap.keymap[e.key] , '内存在' ,
+              this.$store.getters.currentImg , '的同名文件, 移动失败'
+              )
+          }
+
         } else {
           try {
             this.switchImg[e.keyCode]();

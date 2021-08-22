@@ -13,12 +13,13 @@ export default  {
   template:
     `
   <div>
-  <file-drag v-if="!currentPath" @file-selected='onFileSelected'></file-drag>
+<!--  <file-drag v-if="!currentPath" @file-selected='onFileSelected'></file-drag>-->
+  <file-drag v-if="$store.getters.isImgListEmpty" @file-selected='onFileSelected'></file-drag>
         <!-- <file-drag v-if="0" @file-selected='onFileSelected'></file-drag> -->
 
         <image-classifier-container 
         ref="image_classifier_container_"
-            v-if="currentPath"
+            v-if="!$store.getters.isImgListEmpty"
             
             :current-path='currentPath'
             :keymap='currentKeymap.keymap'
@@ -27,7 +28,7 @@ export default  {
 
         <keymap-container
             ref="keymap_container_"
-            v-if="currentPath" 
+            v-if="!$store.getters.isImgListEmpty" 
             :current-keymap="currentKeymap"
             :can_edit='false'
             :keymap-list='keymapList'

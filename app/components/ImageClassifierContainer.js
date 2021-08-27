@@ -3,7 +3,7 @@
 const fs = require("fs");
 const path = require("path");
 
-import {isDir , moveFileTo , exists } from "../util/lib.js";
+import {isDir, moveFileTo, exists, moveFileTo2} from "../util/lib.js";
 
 export default {
 
@@ -155,23 +155,16 @@ export default {
           console.log(err);
         }
       } else {
-        // console.log( app.currentKeymap );
-        // console.log( this.keymap );
-        console.log( e.key );
-        console.log( this.keymap[e.key] );
-        if ( this.$store.getters.currentKeymap.keymap[e.key]) {
-          console.debug( this.$store.getters.currentImg, `将被移动至` , this.$store.getters.currentKeymap.keymap[e.key] )
+        let newPath = this.$store.getters.currentKeymap.keymap[e.key];
+        if ( newPath ) {
+          console.debug( this.$store.getters.currentImg, `将被移动至` , newPath )
 
-          if ( !exists( this.$store.getters.currentKeymap.keymap[e.key] ,
-            this.$store.getters.currentImg
-            ) ) {
-            moveFileTo(  this.$store.getters.currentImg ,
-              this.$store.getters.currentKeymap.keymap[e.key]
-            );
-            this.$store.dispatch('popCurrent');
+          if ( !exists( newPath , this.$store.getters.currentImg) ) {
+            moveFileTo(  this.$store.getters.currentImg , newPath);
+            this.$store.dispatch('popCurrent' , newPath );
 
           }else{
-            console.debug(  this.$store.getters.currentKeymap.keymap[e.key] , '内存在' ,
+            console.debug(  newPath , '内存在' ,
               this.$store.getters.currentImg , '的同名文件, 移动失败'
               )
           }
@@ -201,17 +194,10 @@ export default {
     }
     , undo: function () {
       //  : 撤销文件移动
-      let src_path = this.moved_stack.pop();
 
-      console.log(src_path);
-      let new_path = path.join(this.currentPath,
-        path.basename(src_path)
-      );
-      fs.renameSync(src_path, new_path);
-
-      this.img_queue.splice(this.currentImgIndex, 0, new_path);
-
-      // this.previousImg();
+      let moveedO = this.$store.getters.lastMovedImg;
+      moveFileTo2( moveedO.new , moveedO.old );
+      this.$store.dispatch( 'popLastMoved' );
     }
 
   }

@@ -33,6 +33,15 @@ export default {
     isImgListEmpty( state ){
       // return true;
       return !state.__ImgPathList.length
+    },
+    lastMovedImg( state ){
+      return state.__MovedStack[ state.__MovedStack.length-1 ]
+    },
+    template( state ){
+      return {
+        keymap:{'0': '', '1': '', '2': '', '3': '', '4': '', '5': '', '6': '', '7': '', '8': '', '9': '', 'a': '', 'b': '', 'c': '', 'd': '', 'e': '', 'f': '', 'g': '', 'h': '', 'i': '', 'j': '', 'k': '', 'l': '', 'm': '', 'n': '', 'o': '', 'p': '', 'q': '', 'r': '', 's': '', 't': '', 'u': '', 'v': '', 'w': '', 'x': '', 'y': '', 'z': ''},
+        configName : "newConfig"
+      }
     }
   },
   mutations: {
@@ -108,14 +117,24 @@ export default {
     },
 
     /**
-     * 从图片列表中去除当前图片并添加到已移动图片栈
+     *
      * @param context
      */
-    popCurrent( context ){
-      context.state.__MovedStack.push( context.state.__ImgPathList[ context.state.__ImgPointer ] );
+    popCurrent( context , newPath ){
+      context.state.__MovedStack.push( { old:context.state.__ImgPathList[ context.state.__ImgPointer ], new:newPath } );
       context.state.__ImgPathList.splice( context.state.__ImgPointer , 1);
       context.state.__ImgPointer %= context.state.__ImgPathList.length;
     },
+
+    /**
+     * 从移动图片栈中去除最后一张图片并添加到已图片列表
+     * @param context
+     */
+    popLastMoved( context ){
+      let src = context.state.__MovedStack.pop().old;
+      context.state.__ImgPathList.splice( context.state.__ImgPointer, 0, src );
+    },
+
 
     /**
      * 修改当前按键方案或方案名

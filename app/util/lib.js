@@ -101,13 +101,24 @@ export const checkType = ( fileName ) => {
 
 /**
  * 将文件移动到指定路径, 存在同名文件时会覆盖
- * @param filePath
- * @param newPath
+ * @param filePath 源文件的全路径, 含文件名
+ * @param newPath 目标路径
  */
 export const moveFileTo = ( filePath , newPath ) => {
   let fileName = path.basename( filePath );
   fs.renameSync( filePath , path.join( newPath , fileName )  );
 }
+
+/**
+ * 将文件移动到指定路径, 存在同名文件时会覆盖
+ * @param filePath 源文件的全路径, 不含文件名
+ * @param newPath 目标路径, 含文件名
+ */
+export const moveFileTo2 = ( filePath , newPath ) => {
+  let fileName = path.basename( newPath );
+  fs.renameSync( path.join( filePath , fileName ) , newPath );
+}
+
 
 /**
  * 判断指定路径是否存在 fileName 的同名文件

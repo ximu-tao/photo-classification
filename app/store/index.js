@@ -92,7 +92,7 @@ export default {
     switchImg( state , n ){
       state.__ImgPointer += ( state.__ImgPathList.length + n );
       state.__ImgPointer %= state.__ImgPathList.length;
-      console.debug("切换至上一张图片" , state.__ImgPointer ,
+      console.debug("切换图片" , state.__ImgPointer ,
         state.__ImgPathList.length , state.__ImgPathList[state.__ImgPointer] );
     }
 
@@ -119,11 +119,15 @@ export default {
     /**
      *
      * @param context
+     * @param newPath
      */
     popCurrent( context , newPath ){
       context.state.__MovedStack.push( { old:context.state.__ImgPathList[ context.state.__ImgPointer ], new:newPath } );
       context.state.__ImgPathList.splice( context.state.__ImgPointer , 1);
       context.state.__ImgPointer %= context.state.__ImgPathList.length;
+      if ( isNaN(context.state.__ImgPointer) ){
+        context.state.__ImgPointer = 0;
+      }
     },
 
     /**

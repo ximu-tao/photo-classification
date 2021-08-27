@@ -1,29 +1,11 @@
 // ImageClassifierContainer
 
-const fs = require("fs");
-const path = require("path");
-
-import {isDir, moveFileTo, exists, moveFileTo2} from "../util/lib.js";
+import { moveFileTo, exists, moveFileTo2 } from "../util/lib.js";
 
 export default {
 
-  props: {
-    currentPath: {
-      type: [String]
-      , required: true,
-    },
-
-    keymap: {
-      type: [Object]
-      , required: true,
-    }
-  },
-
   data() {
     return {
-      img_queue: [],
-      moved_stack: [],
-      currentImgIndex: 0,
       isCurrentImg: true,
       switchImg: {
         '-1': this.previousImg,
@@ -35,7 +17,6 @@ export default {
         '39': this.nextImg,
         '40': this.nextImg
       },
-      trueCurrentImgPath: "",
       controlKeyFun: {
         'z': this.undo,
       }
@@ -43,12 +24,7 @@ export default {
   },
 
   computed: {
-    currentImgPath: function () {
-      return this.img_queue[this.currentImgIndex];
-    }
-    , nextImgPath: function () {
-      return this.img_queue[this.currentImgIndex + 1];
-    }
+
   },
 
   template: `
@@ -59,96 +35,31 @@ export default {
             @keyup="onKeyUp"
             tabindex='-1'
             >
-<!--            <img class="currentImg" v-show='isCurrentImg' :src="currentImgPath">-->
             <img class="currentImg" v-show='isCurrentImg' :src="$store.getters.currentImg">
             
         </div>
         `
 
-  // <img class="nextImg" v-show='!isCurrentImg' :src="nextImgPath">
+
   , methods: {
-    init: function () {
-      let files_list = fs.readdirSync(this.currentPath);
-      let this_ = this;
 
-
-      files_list.forEach(
-        function (key, index, array) {
-          array[index] = path.join(this_.currentPath, key)
-        }
-      );
-
-      files_list = files_list.filter(
-        function (item) {
-          return (
-            // 增加了一些支持的图片类型
-            ['.jpg', '.png', '.jpeg'
-              , '.gif', '.webp' , '.apng'
-              , '.bmp' , '.ico', '.cur' ,
-              '.jfif', '.pjpeg', '.pjp'
-              , '.svg']
-              .indexOf(path.extname(item).toLowerCase()) != -1
-            && fs.existsSync(item)
-            && !isDir(item))
-        }
-      )
-
-      this.img_queue = files_list;
-
-
-    }
-    , nextImg: function () {
+    nextImg: function () {
       //  : 切换下一张图片
-      this.currentImgIndex += 1;
-      this.currentImgIndex %= this.img_queue.length;
       this.$store.commit('nextImg');
     }
     , previousImg: function () {
       //  : 切换上一张图片
-      this.currentImgIndex += (this.img_queue.length - 1);
-      // console.log( this.currentImgIndex );
-      this.currentImgIndex %= this.img_queue.length;
       this.$store.commit('previousImg');
     }
     , moveImg: function (oldImgIndex, newPath) {
-      //  : 移动图片的路径
 
-      console.log( newPath );
-
-      if (fs.existsSync(newPath) ) {
-        // 目标文件夹存在同名文件, 不执行移动操作
-        // TODO : 对用户的提示 ,
-        return ;
-      }
-
-      try {
-        fs.renameSync(this.img_queue[oldImgIndex], newPath)
-
-        this.moved_stack.push(newPath);
-        this.img_queue.splice( oldImgIndex, 1);
-
-        // 倒数第一张图片移动文件后无法正常显示第一张图片
-        this.currentImgIndex %= this.img_queue.length;
-      } catch (err) {
-        throw err;
-
-        // TODO ERROR: 如果目标文件夹已存在同名文件, 或其他情况
-      }
     }
 
     , onKeyUp: function (e) {
       //  : 当按键被按下时, 判断按键并调用函数
       e.preventDefault();
-      // console.log('onKeyUp');
-      // console.log(e);
-
-      // console.log( e.key );
-      // console.log( this.keymap[e.key] );
 
       if (e.ctrlKey) {
-        // console.log(e.keyCode );
-
-        // console.log(this.controlKeyFun[e.key]);
         try {
           this.controlKeyFun[e.key]()
         } catch (err) {
@@ -202,13 +113,7 @@ export default {
 
   }
   , mounted: function () {
-    this.init()
+
   }
-  , watch: {
-    img_queue: function (newval, oldVal) {
-      if (newval == 0) {
-        this.$emit('queueempty')
-      }
-    }
-  }
+
 }

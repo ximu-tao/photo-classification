@@ -1,20 +1,10 @@
 // KeymapContainer
 
 export default {
-  props: {
-    'currentKeymap': Object,
-    'keymapList': Array,
-    'can_edit': {
-      type: Boolean,
-
-      default: true,
-    }
-    , 'isMinimize' : Boolean
-
-  },
+  props: {},
   data: function () {
     return {
-      canedit: true,
+      canedit: false,
       pathVerificaError: 0
       , styleObj: function () {
         return {
@@ -26,7 +16,8 @@ export default {
       , selectedConfigIndex: 0,
       editKeymapName : '',
       keymapEdit : {},
-      addConfiging :false
+      addConfiging :false,
+      isMinimize:false
     }
   },
   computed: {
@@ -83,7 +74,7 @@ export default {
                     v-for='(val, key, index) in $store.getters.currentKeymap.keymap'
                     :img2path='val'
                     :keypath='key'
-                    :key="key"
+                    :key="'1'+key"
                     :can_edit='canedit'
 
                     ></tr>
@@ -94,7 +85,7 @@ export default {
                     v-for='(val, key, index) in keymapEdit'
                     :img2path='val'
                     :keypath='key'
-                    :key="key"
+                    :key="'2'+key"
                     :can_edit='canedit'
                     @change='onChange'
                     ></tr>
@@ -117,15 +108,7 @@ export default {
 
 
   methods: {
-    init: function () {
-      this.keymap_ = { ...this.currentKeymap.keymap };
-      this.keymapName = this.currentKeymap.configName;
-      this.canedit = this.can_edit;
-
-      // console.log(this.keymapList);
-    }
-
-    ,addConfig(){
+    addConfig(){
 
       this.keymapEdit = {
         '0': '', '1': '', '2': '',
@@ -142,17 +125,14 @@ export default {
           'x': '', 'y': '', 'z': ''
       }
       this.editKeymapName = "newConfig";
-
-
       this.addConfiging = true;
       this.canedit = true;
 
     },
 
     saveAddConfig(){
-        // this.$emit("addconfig" , this.editKeymapName , this.keymapEdit );
 
-        this.$store.dispatch( 'addKeymap' , {
+      this.$store.dispatch( 'addKeymap' , {
           configName:this.editKeymapName, keymap:this.keymapEdit
         } )
       this.addConfiging = false;
@@ -163,24 +143,23 @@ export default {
     ,addConfiged( keymapListLength ){
       this.selectedConfigIndex = keymapListLength-1;
 
-      this.init();
-      this.switchConfig();
+      // this.init();
+      // this.switchConfig();
 
     }
 
 
     , switchMinimize : function(){
-      this.$emit('switchminimize');
+      this.$data.isMinimize = !this.$data.isMinimize;
     }
 
     , onChange: function (_pathkey_, _img2path_) {
       //  : path 经过验证后才会调用这个方法
-      // this.$emit( 'change', _pathkey_ , _img2path_ );
+
       this.keymapEdit[_pathkey_] = _img2path_;
 
     }
     , cancelEdit: function () {
-      this.init();
       this.canedit = false;
       this.addConfiging = false;
     }
@@ -188,31 +167,16 @@ export default {
     , saveEdit: function () {
       //  : 通知父组件 并将新的 keymap 传递
       this.canedit = false;
-      // console.log(this.configName);
-      // this.$emit('keymapedit', this.editKeymapName, this.keymapEdit)
-
       this.$store.dispatch('setCurrentKeymap' , {
         configName:this.editKeymapName, keymap:this.keymapEdit
       } )
     }
     , startEdit: function () {
-      this.keymapEdit = this.keymap_;
-      this.editKeymapName = this.keymapName;
+      this.keymapEdit = this.$store.getters.currentKeymap.keymap;
+      this.editKeymapName = this.$store.getters.currentKeymap.configName;
       this.canedit = true;
     }
-    , switchConfig: function () {
-      // console.log( this.keymapName );
-      // console.log(this.selectedConfigIndex);
-      // this.$emit('switchconfig', this.selectedConfigIndex)
-      // this.$store.commit( 'switchConfig' , this.selectedConfigIndex )
-    }
+
   }
-  , created: function () {
-    this.init();
-  }
-  , watch: {
-    currentKeymap: function (newval, oldVal) {
-      this.init()
-    }
-  }
+
 }

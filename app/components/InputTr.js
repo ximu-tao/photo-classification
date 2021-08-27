@@ -8,7 +8,7 @@ export default {
       type: [String],
       validator: function (v) {
         let f = false;
-        if ((v.length == 1) && ('abcdefghijklmnopqrstuvwxyz0123456789'.indexOf(v) != -1)) {
+        if ((v.length === 1) && ('abcdefghijklmnopqrstuvwxyz0123456789'.indexOf(v) !== -1)) {
           return true;
         }
         return f;

@@ -32,7 +32,7 @@ export default {
     },
     selectFile: async function () {
       //  : 弹出文件选择框
-      var pathObjObj = await remote.dialog.showOpenDialog(
+      const pathObjObj = await remote.dialog.showOpenDialog(
         {
           title: '请选择一个包含图片文件夹',
           properties: [
@@ -40,13 +40,12 @@ export default {
           ],
           buttonLabel: '选择此目录'
         }
-      )
+      );
       // console.log(pathObjObj.filePaths[0]);
       this.fileSelected(pathObjObj.filePaths[0]);
     },
     fileSelected: function (path) {
       //  : 获得路径后调用
-      this.$emit('file-selected', path);
       this.$store.dispatch('imgPath' , path );
     },
     onDragenter: function (e) {

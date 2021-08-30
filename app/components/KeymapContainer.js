@@ -10,10 +10,7 @@ export default {
         return {
           'backgroundColor': 'write'
         }
-      }
-      , keymap_: null
-      , keymapName: ''
-      , selectedConfigIndex: 0,
+      },
       editKeymapName : '',
       keymapEdit : {},
       addConfiging :false,
@@ -92,8 +89,7 @@ export default {
 
 
                 <tr v-if='canedit'>
-                    <td v-show="!addConfiging"><input type='button' @click='saveEdit' value='保存'></td>
-                    <td v-show="addConfiging"><input type='button' @click='saveAddConfig' value='保存'></td>
+                    <td><input type='button' @click='save' value='保存'></td>
                     <td><input type='button' @click='cancelEdit' value='取消'></td>
                 </tr>
 
@@ -108,6 +104,14 @@ export default {
 
 
   methods: {
+    save(){
+      if ( this.addConfiging ){
+        this.saveAddConfig();
+      }else{
+        this.saveEdit();
+      }
+    },
+
     addConfig(){
 
       this.keymapEdit = {
@@ -140,15 +144,6 @@ export default {
     }
 
 
-    ,addConfiged( keymapListLength ){
-      this.selectedConfigIndex = keymapListLength-1;
-
-      // this.init();
-      // this.switchConfig();
-
-    }
-
-
     , switchMinimize : function(){
       this.$data.isMinimize = !this.$data.isMinimize;
     }
@@ -165,9 +160,8 @@ export default {
     }
 
     , saveEdit: function () {
-      //  : 通知父组件 并将新的 keymap 传递
       this.canedit = false;
-      this.$store.dispatch('setCurrentKeymap' , {
+      this.$store.dispatch('alterCurrentKeymap' , {
         configName:this.editKeymapName, keymap:this.keymapEdit
       } )
     }

@@ -145,7 +145,7 @@ export default {
      * @param state
      * @param k:{ configName , keymap }
      */
-    setCurrentKeymap( {state} , k ){
+    alterCurrentKeymap( {state} , k ){
       state.__KeymapList[state.__KeymapPointer].configName = k.configName;
       state.__KeymapList[state.__KeymapPointer].keymap = k.keymap;
       saveConfigToFile( state.__KeymapList );

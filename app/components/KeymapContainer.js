@@ -95,7 +95,8 @@ export default {
 
                 <tr v-if='!canedit'>
                     <td></td>
-                    <td><input type='button' @click='startEdit' value='修改方案'></td>
+                    <td><input type='button' @click='startEdit' value='修改方案'>
+                    <input type='button' @click='deleteKeymap' value='删除方案'></td>
                 </tr>
 
            </table>
@@ -104,6 +105,16 @@ export default {
 
 
   methods: {
+    deleteKeymap(){
+      let cruuName = this.$store.getters.currentKeymap.configName;
+      // console.log( this.$store.getters.keymapList );
+      if (window.confirm(`你确定要删除${cruuName}吗?`)) {
+
+        this.$store.commit('deleteKeymap');
+      }
+
+    },
+
     save(){
       if ( this.addConfiging ){
         this.saveAddConfig();

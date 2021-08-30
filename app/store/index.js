@@ -94,6 +94,26 @@ export default {
       state.__ImgPointer %= state.__ImgPathList.length;
       console.debug("切换图片" , state.__ImgPointer ,
         state.__ImgPathList.length , state.__ImgPathList[state.__ImgPointer] );
+    },
+
+    /**
+     * 删除一个按键方案, 未传入参数时默认删除当前方案
+     * @param state
+     * @param index
+     */
+    deleteKeymap( state , index ){
+      if ( index === undefined ){
+        index = state.__KeymapPointer;
+      }
+
+      state.__KeymapList.splice( index , 1);
+
+      if ( (state.__KeymapPointer >= state.__KeymapList.length) ||
+        (index < state.__KeymapPointer) ){
+        state.__KeymapPointer-=1;
+      }
+
+      saveConfigToFile( state.__KeymapList );
     }
 
   },

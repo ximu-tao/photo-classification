@@ -3,22 +3,22 @@ const remote = require('electron').remote;
 export default {
   data: function () {
     return {
-      'fileDraging': false
+      'fileDragging': false
     }
   },
   template: `
-        <div
-            class="file-drag-container"
-            :class="{ 'file-draging': fileDraging }"
-            @drop="onDrop"
-            @dragenter="onDragenter"
-            @dragover="onDragover" 
-            @dragleave="onDragleave" 
-            @click="selectFile"
-            >
-            <div class='file-drag-prompt' v-if='!fileDraging' >点击选择文件夹, 或拖拽文件到此</div>
-            <div class='file-drag-prompt' v-if='fileDraging' >在此处松开鼠标即可选择此文件</div>
-        </div>`,
+    <div
+        class="file-drag-container"
+        :class="{ 'file-dragging': fileDragging }"
+        @drop="onDrop"
+        @dragenter="onDragenter"
+        @dragover="onDragover"
+        @dragleave="onDragleave"
+        @click="selectFile"
+    >
+    <div class='file-drag-prompt' v-if='!fileDragging'>点击选择文件夹, 或拖拽文件到此</div>
+    <div class='file-drag-prompt' v-if='fileDragging'>在此处松开鼠标即可选择此文件</div>
+    </div>`,
 
   methods: {
     init: function () {
@@ -50,7 +50,7 @@ export default {
     },
     onDragenter: function (e) {
       // : 拖拽文件进入后执行
-      this.fileDraging = true;
+      this.fileDragging = true;
       e.preventDefault();
     },
     onDragover: function (e) {
@@ -58,7 +58,7 @@ export default {
     },
     onDragleave: function (e) {
       // : 拖拽文件离开后执行
-      this.fileDraging = false;
+      this.fileDragging = false;
       e.preventDefault();
     },
   }

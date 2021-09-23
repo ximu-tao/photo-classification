@@ -35,7 +35,7 @@ export default {
             @keyup="onKeyUp"
             tabindex='-1'
             >
-            <img class="currentImg" v-show='isCurrentImg' :src="$store.getters.currentImg">
+            <img :alt="$store.getters.currentImg" class="currentImg" v-show='isCurrentImg' :src="$store.getters.currentImg">
             
         </div>
         `
@@ -100,14 +100,14 @@ export default {
     , onMousedown: function (e) {
       // TODO : 鼠标侧键
 
-      // 为什么这里 e.preventDefault(); 后 , kekyup 事件就不生效了呢?
+      // 为什么这里 e.preventDefault(); 后 , keyup 事件就不生效了呢?
       // console.log( '鼠标侧键' );
     }
     , undo: function () {
       //  : 撤销文件移动
 
-      let moveedO = this.$store.getters.lastMovedImg;
-      moveFileTo2( moveedO.new , moveedO.old );
+      let moved = this.$store.getters.lastMovedImg;
+      moveFileTo2( moved.new , moved.old );
       this.$store.dispatch( 'popLastMoved' );
     }
 

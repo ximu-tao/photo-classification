@@ -10,4 +10,4 @@ Vue.component( "keymap-container", KeymapContainer );
 Vue.component('input-tr', InputTr );
 Vue.component('image-classifier-container', ImageClassifierContainer );
 
-var app = new Vue( App );
+new Vue( App );

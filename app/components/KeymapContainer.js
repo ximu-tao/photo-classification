@@ -4,16 +4,15 @@ export default {
   props: {},
   data: function () {
     return {
-      canedit: false,
-      pathVerificaError: 0
-      , styleObj: function () {
+      canEdit: false,
+      styleObj: function () {
         return {
           'backgroundColor': 'write'
         }
       },
       editKeymapName : '',
       keymapEdit : {},
-      addConfiging :false,
+      addingConfig :false,
       isMinimize:false
     }
   },
@@ -32,9 +31,9 @@ export default {
         <div
         v-show='!isMinimize'
         class='keymap-container'
-        :class="{ 'keymap-container-canedit': canedit , 'keymap-container-unedit': !canedit }"
+        :class="{ 'keymap-container-canedit': canEdit , 'keymap-container-unedit': !canEdit }"
         >
-        <div v-show="!canedit">
+        <div v-show="!canEdit">
 <!-- 
 使用临时变量无法在添加方案后切换到新的方案
 使用 v-model='$store.getters' 无法双绑
@@ -57,7 +56,7 @@ export default {
             <button @click='switchMinimize'>缩小</button>
             
         </div>
-            <div v-show="addConfiging">
+            <div v-show="addingConfig">
             方案名: <input type="text" v-model="editKeymapName" >
             
             </div>
@@ -66,34 +65,34 @@ export default {
                 <tr><th><kbd>按键</kbd></th><th>目录</th>
                 </tr>
                 <tr
-                    v-show="!canedit"
+                    v-show="!canEdit"
                     is='input-tr' 
-                    v-for='(val, key, index) in $store.getters.currentKeymap.keymap'
+                    v-for='(val, key) in $store.getters.currentKeymap.keymap'
                     :img2path='val'
                     :keypath='key'
                     :key="'1'+key"
-                    :can_edit='canedit'
+                    :can_edit='canEdit'
 
                     ></tr>
                    
                 <tr
-                    v-if="canedit"
+                    v-if="canEdit"
                     is='input-tr'
-                    v-for='(val, key, index) in keymapEdit'
+                    v-for='(val, key) in keymapEdit'
                     :img2path='val'
                     :keypath='key'
                     :key="'2'+key"
-                    :can_edit='canedit'
+                    :can_edit='canEdit'
                     @change='onChange'
                     ></tr>
 
 
-                <tr v-if='canedit'>
+                <tr v-if='canEdit'>
                     <td><input type='button' @click='save' value='保存'></td>
                     <td><input type='button' @click='cancelEdit' value='取消'></td>
                 </tr>
 
-                <tr v-if='!canedit'>
+                <tr v-if='!canEdit'>
                     <td></td>
                     <td><input type='button' @click='startEdit' value='修改方案'>
                     <input type='button' @click='deleteKeymap' value='删除方案'></td>
@@ -106,9 +105,9 @@ export default {
 
   methods: {
     deleteKeymap(){
-      let cruuName = this.$store.getters.currentKeymap.configName;
+      let currName = this.$store.getters.currentKeymap.configName;
       // console.log( this.$store.getters.keymapList );
-      if (window.confirm(`你确定要删除${cruuName}吗?`)) {
+      if (window.confirm(`你确定要删除${currName}吗?`)) {
 
         this.$store.commit('deleteKeymap');
       }
@@ -116,7 +115,7 @@ export default {
     },
 
     save(){
-      if ( this.addConfiging ){
+      if ( this.addingConfig ){
         this.saveAddConfig();
       }else{
         this.saveEdit();
@@ -140,8 +139,8 @@ export default {
           'x': '', 'y': '', 'z': ''
       }
       this.editKeymapName = "newConfig";
-      this.addConfiging = true;
-      this.canedit = true;
+      this.addingConfig = true;
+      this.canEdit = true;
 
     },
 
@@ -150,8 +149,8 @@ export default {
       this.$store.dispatch( 'addKeymap' , {
           configName:this.editKeymapName, keymap:this.keymapEdit
         } )
-      this.addConfiging = false;
-      this.canedit = false;
+      this.addingConfig = false;
+      this.canEdit = false;
     }
 
 
@@ -159,19 +158,19 @@ export default {
       this.$data.isMinimize = !this.$data.isMinimize;
     }
 
-    , onChange: function (_pathkey_, _img2path_) {
+    , onChange: function (_pathKey_, _img2path_) {
       //  : path 经过验证后才会调用这个方法
 
-      this.keymapEdit[_pathkey_] = _img2path_;
+      this.keymapEdit[_pathKey_] = _img2path_;
 
     }
     , cancelEdit: function () {
-      this.canedit = false;
-      this.addConfiging = false;
+      this.canEdit = false;
+      this.addingConfig = false;
     }
 
     , saveEdit: function () {
-      this.canedit = false;
+      this.canEdit = false;
       this.$store.dispatch('alterCurrentKeymap' , {
         configName:this.editKeymapName, keymap:this.keymapEdit
       } )
@@ -179,7 +178,7 @@ export default {
     , startEdit: function () {
       this.keymapEdit = this.$store.getters.currentKeymap.keymap;
       this.editKeymapName = this.$store.getters.currentKeymap.configName;
-      this.canedit = true;
+      this.canEdit = true;
     }
 
   }

@@ -1,9 +1,21 @@
-// ImageClassifierContainer
+<template>
+  <div
+      class="img-container"
+      @mousewheel="onMousewheel"
+      @mousedown="onMousedown"
+      @keyup="onKeyUp"
+      tabindex='-1'
+  >
+    <img :alt="$store.getters.currentImg" class="currentImg" v-show='isCurrentImg' :src="$store.getters.currentImg">
 
-import { moveFileTo, exists, moveFileTo2 } from "../util/lib.js";
+  </div>
+</template>
+
+<script>
+import {exists, moveFileTo, moveFileTo2} from "../util/lib";
 
 export default {
-
+  name: "ImageClassifierContainer",
   data() {
     return {
       isCurrentImg: true,
@@ -22,26 +34,7 @@ export default {
       }
     }
   },
-
-  computed: {
-
-  },
-
-  template: `
-        <div 
-            class="img-container"
-            @mousewheel="onMousewheel"
-            @mousedown="onMousedown"
-            @keyup="onKeyUp"
-            tabindex='-1'
-            >
-            <img :alt="$store.getters.currentImg" class="currentImg" v-show='isCurrentImg' :src="$store.getters.currentImg">
-            
-        </div>
-        `
-
-
-  , methods: {
+  methods: {
 
     nextImg: function () {
       //  : 切换下一张图片
@@ -76,8 +69,8 @@ export default {
 
           }else{
             console.debug(  newPath , '内存在' ,
-              this.$store.getters.currentImg , '的同名文件, 移动失败'
-              )
+                this.$store.getters.currentImg , '的同名文件, 移动失败'
+            )
           }
 
         } else {
@@ -117,3 +110,27 @@ export default {
   }
 
 }
+</script>
+
+<style scoped>
+
+.currentImg{
+  text-align: center;
+  max-width: 100%;
+  max-height: 100%;
+  display:block;
+  z-index: 100;
+  margin: 0 auto;
+}
+
+.img-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* overflow: hidden; */
+  background-color: #211f1f;
+
+}
+</style>

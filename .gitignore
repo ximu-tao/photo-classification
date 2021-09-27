@@ -1,1 +1,4 @@
 app/node_modules
+/app/out/图片分类-win32-x64/
+/.idea
+.gitignore

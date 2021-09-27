@@ -1,10 +1,13 @@
+import Vue from 'vue'
+import Vuex from 'vuex'
 import {readConfig, listDir, checkType , saveConfigToFile } from "../util/lib.js";
 
+Vue.use(Vuex)
 const parse = (text) => {
   return {keymapList: JSON.parse(text)}
 }
 
-export default {
+export default new Vuex.Store({
   state: () => {
     return {
       __KeymapList: [],
@@ -76,7 +79,7 @@ export default {
       state.__ImgPointer %= state.__ImgPathList.length;
       console.debug("切换至下一张图片" , state.__ImgPointer ,
         state.__ImgPathList.length , state.__ImgPathList[state.__ImgPointer] );
-      },
+    },
 
     /**
      * 切换到上一张图片
@@ -123,7 +126,9 @@ export default {
      * 读取 配置文件 , 初始化数据
      */
     init(context) {
+      console.log("Store init");
       readConfig().then((data) => {
+        console.log(data)
         context.commit('setKeymapList', parse(data).keymapList);
       });
     },
@@ -184,4 +189,4 @@ export default {
   },
 
 
-}
+})

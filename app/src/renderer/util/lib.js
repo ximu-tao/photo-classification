@@ -48,7 +48,7 @@ export const readConfig = async ()=>{
   let data;
   if (!fs.existsSync( __CONFIG_PATH )) {
     data = newKeymap;
-    this.setConfigFile();
+    // this.setConfigFile();
   }else {
     data = fs.readFileSync( __CONFIG_PATH, 'utf-8');
   }

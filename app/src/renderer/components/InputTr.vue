@@ -1,8 +1,24 @@
-// InputTr
+<template>
+  <tr
+      class='keymap-tr'
+  >
+    <td>{{ keypath }}</td>
+    <td>
+      <input
+          :style="[ styleObj ]"
+          @change="onChange"
+          :value='img2path'
+          :disabled="!can_edit"
+      />
+    </td>
+  </tr>
+</template>
 
-const fs = require('fs')
+<script>
+import fs from "fs";
 
 export default {
+  name: "InputTr",
   props: {
     'keypath': {
       type: [String],
@@ -20,29 +36,14 @@ export default {
     , 'can_edit': Boolean
   }
   ,
-  data: function () {
+  data() {
     return {
       styleObj: {
         backgroundColor: 'white'
       }
     }
   },
-  template: `
-                <tr
-                    class='keymap-tr'
-                    >
-                    <td>{{ keypath }}</td>
-                    <td>
-                     <input
-                     :style="[ styleObj ]"
-                     @change="onChange"
-                     :value='img2path'
-                     :disabled="!can_edit"
-                     />
-                    </td>
-                </tr>
-    `
-  , methods: {
+  methods: {
     init: function () {
 
     }
@@ -60,4 +61,10 @@ export default {
       }
     }
   }
+
 }
+</script>
+
+<style scoped>
+
+</style>

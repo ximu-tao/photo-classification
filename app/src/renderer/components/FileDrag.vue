@@ -3,9 +3,9 @@
       class="file-drag-container"
       :class="{ 'file-dragging': fileDragging }"
       @drop.prevent="onDrop"
-      @dragenter="onDragenter"
+      @dragenter.prevent="onDragenter"
       @dragover.prevent="onDragover"
-      @dragleave="onDragleave"
+      @dragleave.prevent="onDragleave"
       @click="selectFile"
   >
     <div class='file-drag-prompt' v-if='!fileDragging'>点击选择文件夹, 或拖拽文件到此</div>
@@ -29,16 +29,15 @@ export default {
       //  : 文件拖拽组件初始化
     },
     onDrop: function (e) {
-      e.preventDefault();
       //  :  拖拽文件后执行
       // console.log('onDrop');
       console.log(e.dataTransfer.files);
       console.log(e.dataTransfer.files[0]);
       this.fileSelected(e.dataTransfer.files[0].path);
     },
-    selectFile: async function () {
+    selectFile: function () {
       //  : 弹出文件选择框
-      const pathObjObj = await remote.dialog.showOpenDialog(
+      const pathObjObj = remote.dialog.showOpenDialog(
           {
             title: '请选择一个包含图片文件夹',
             properties: [
@@ -57,15 +56,13 @@ export default {
     onDragenter: function (e) {
       // : 拖拽文件进入后执行
       this.fileDragging = true;
-      e.preventDefault();
     },
     onDragover: function (e) {
-      e.preventDefault();
+      this.fileDragging = true;
     },
     onDragleave: function (e) {
       // : 拖拽文件离开后执行
       this.fileDragging = false;
-      e.preventDefault();
     },
   }
 }

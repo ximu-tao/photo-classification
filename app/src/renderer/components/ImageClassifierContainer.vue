@@ -1,9 +1,9 @@
 <template>
   <div
       class="img-container"
-      @mousewheel="onMousewheel"
+      @mousewheel.prevent="onMousewheel"
       @mousedown="onMousedown"
-      @keyup="onKeyUp"
+      @keyup.prevent="onKeyUp"
       tabindex='-1'
   >
     <img :alt="$store.getters.currentImg" class="currentImg" v-show='isCurrentImg' :src="$store.getters.currentImg">
@@ -50,8 +50,6 @@ export default {
 
     , onKeyUp: function (e) {
       //  : 当按键被按下时, 判断按键并调用函数
-      e.preventDefault();
-
       if (e.ctrlKey) {
         try {
           this.controlKeyFun[e.key]()
@@ -88,7 +86,6 @@ export default {
 
     , onMousewheel: function (e) {
       // TODO : 鼠标滚轮
-      e.preventDefault();
     }
     , onMousedown: function (e) {
       // TODO : 鼠标侧键

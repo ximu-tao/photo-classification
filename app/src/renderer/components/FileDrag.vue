@@ -20,7 +20,8 @@ export default {
   name: "FileDrag",
   data () {
     return {
-      'fileDragging': false
+      'fileDragging': false,
+      "opened" : false,
     }
   },
 
@@ -37,17 +38,25 @@ export default {
     },
     selectFile: function () {
       //  : 弹出文件选择框
-      const pathObjObj = remote.dialog.showOpenDialog(
-          {
-            title: '请选择一个包含图片文件夹',
-            properties: [
-              'openFile', 'openDirectory'
-            ],
-            buttonLabel: '选择此目录'
-          }
-      );
-      console.log(pathObjObj );
-      this.fileSelected(pathObjObj[0] ) ;
+      // 该事件是阻塞的, 多次触发事件会导致, 关闭文件选择框后继续弹出文件选择框, 但不会同时弹出
+      if ( ! this.opened ){
+        this.opened = true;
+        const pathObjObj = remote.dialog.showOpenDialog(
+            {
+              title: '请选择一个包含图片文件夹',
+              properties: [
+                'openFile', 'openDirectory'
+              ],
+              buttonLabel: '选择此目录'
+            }
+        );
+        console.log(pathObjObj );
+        setTimeout( ()=>{
+          this.opened = false;
+        } , 0 );
+        // 0秒后再将 this.opened = false, 使得事件阻塞期间多次触发的事件无效
+        this.fileSelected(pathObjObj[0] ) ;
+      }
     },
     fileSelected: function (path) {
       //  : 获得路径后调用

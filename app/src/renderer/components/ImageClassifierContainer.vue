@@ -6,13 +6,13 @@
       @keyup.prevent="onKeyUp"
       tabindex='-1'
   >
-    <img :alt="$store.getters.currentImg" class="currentImg" v-show='isCurrentImg' :src="$store.getters.currentImg">
+    <img :alt="$store.getters.currentImg" class="currentImg" v-show='isCurrentImg' :src="imgData">
 
   </div>
 </template>
 
 <script>
-import {exists, moveFileTo, moveFileTo2} from "../util/lib";
+import {exists, moveFileTo, moveFileTo2 , readImgAsBase64} from "../util/lib";
 
 export default {
   name: "ImageClassifierContainer",
@@ -104,6 +104,11 @@ export default {
   }
   , mounted: function () {
 
+  },
+  computed: {
+    imgData: function () {
+      return  readImgAsBase64( this.$store.getters.currentImg );
+    }
   }
 
 }

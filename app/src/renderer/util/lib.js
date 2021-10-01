@@ -134,3 +134,13 @@ export const exists = ( newPath , fileName ) =>{
     newPath , path.basename( fileName )
   ) );
 }
+
+/**
+ * 读取指定图片文件并转化为 Base64 编码
+ * @param path
+ * @return string
+ */
+export const readImgAsBase64 = ( path )=>{
+    let data = fs.readFileSync( path);
+    return "data:image/jpg;base64," + data.toString('base64');
+}

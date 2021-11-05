@@ -3,8 +3,8 @@ import path from "path";
 
 /**
  * 判断一个文件是否是文件夹
- * @param pathName
- * @returns {boolean}
+ * @param {string} pathName 文件路径
+ * @returns {boolean} 是否为文件夹
  */
 export const isDir = (pathName)=> {
   let stat = fs.lstatSync(pathName);
@@ -115,8 +115,8 @@ export const moveFileTo = ( filePath , newPath ) => {
 
 /**
  * 将文件移动到指定路径, 存在同名文件时会覆盖
- * @param filePath 源文件的全路径, 不含文件名
- * @param newPath 目标路径, 含文件名
+ * @param {string} filePath 源文件的全路径, 不含文件名
+ * @param {string} newPath 目标路径, 含文件名
  */
 export const moveFileTo2 = ( filePath , newPath ) => {
   let fileName = path.basename( newPath );
@@ -126,8 +126,9 @@ export const moveFileTo2 = ( filePath , newPath ) => {
 
 /**
  * 判断指定路径是否存在 fileName 的同名文件
- * @param newPath
- * @param fileName
+ * @param {string} newPath 目标路径
+ * @param {string} fileName 文件名
+ * @returns {boolean} 文件是否存在
  */
 export const exists = ( newPath , fileName ) =>{
   return fs.existsSync( path.join(
@@ -137,8 +138,8 @@ export const exists = ( newPath , fileName ) =>{
 
 /**
  * 读取指定图片文件并转化为 Base64 编码
- * @param path
- * @return string
+ * @param {string} path 图片路径
+ * @returns {string} BASE64编码形式的图片
  */
 export const readImgAsBase64 = ( path )=>{
     let data = fs.readFileSync( path);

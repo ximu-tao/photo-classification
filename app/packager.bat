@@ -1,1 +1,0 @@
-electron-packager . Õº∆¨∑÷¿‡ --platform=win32 --arch=x64 --out=./out --overwrite --ignore=node_modules

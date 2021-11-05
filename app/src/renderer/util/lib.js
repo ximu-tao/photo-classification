@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+import fs from "fs";
+import path from "path";
 
 /**
  * 判断一个文件是否是文件夹

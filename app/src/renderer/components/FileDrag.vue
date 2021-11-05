@@ -14,7 +14,7 @@
 </template>
 
 <script>
-const remote = require('electron').remote;
+import { remote } from "electron";
 
 export default {
   name: "FileDrag",

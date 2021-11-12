@@ -5,6 +5,7 @@
       @mousedown="onMousedown"
       @keyup.prevent="onKeyUp"
       tabindex='-1'
+      @contextmenu.prevent="popupMenu"
   >
     <img :alt="$store.getters.currentImg" class="currentImg" v-show='isCurrentImg' :src="imgData">
 
@@ -13,6 +14,9 @@
 
 <script>
 import {exists, moveFileTo, moveFileTo2 , readImgAsBase64} from "../util/lib";
+import { remote, clipboard } from 'electron';
+
+
 
 export default {
   name: "ImageClassifierContainer",
@@ -31,10 +35,29 @@ export default {
       },
       controlKeyFun: {
         'z': this.undo,
-      }
+      },
+      contextmenu:remote.Menu.buildFromTemplate([
+        {
+          label: '复制文件路径',
+          click: () => {
+            console.debug("复制文件路径")
+            clipboard.writeText(this.$store.getters.currentImg );
+            console.debug(`复制文件路径成功${ this.$store.getters.currentImg }`)
+          },
+        }
+      ])
     }
   },
   methods: {
+    popupMenu(){
+
+      // 弹出右键菜单
+      this.contextmenu.popup(
+          {
+            window: remote.getCurrentWindow()
+          }
+      );
+    },
 
     nextImg: function () {
       //  : 切换下一张图片

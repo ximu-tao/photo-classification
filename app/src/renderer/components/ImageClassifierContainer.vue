@@ -107,6 +107,9 @@ export default {
   },
   computed: {
     imgData: function () {
+      let title = `${this.$store.getters.currentImg} - [${ this.$store.getters.currentImgIndex+1 }/${ this.$store.getters.imgListSize }] - 图片分类`;
+      document.title = title;
+      console.debug( title );
       return  readImgAsBase64( this.$store.getters.currentImg );
     }
   }

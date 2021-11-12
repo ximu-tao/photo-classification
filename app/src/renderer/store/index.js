@@ -30,6 +30,12 @@ export default new Vuex.Store({
     currentImg(state) {
       return state.__ImgPathList[state.__ImgPointer];
     },
+    currentImgIndex( state ){
+      return state.__ImgPointer;
+    },
+    imgListSize( state ){
+      return state.__ImgPathList.length;
+    },
     currentKeymapIndex( state ){
       return state.__KeymapPointer;
     },

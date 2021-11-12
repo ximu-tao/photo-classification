@@ -8,8 +8,14 @@
       @dragleave.prevent="onDragleave"
       @click="selectFile"
   >
-    <div class='file-drag-prompt' v-if='!fileDragging'>点击选择文件夹, 或拖拽文件到此</div>
-    <div class='file-drag-prompt' v-if='fileDragging'>在此处松开鼠标即可选择此文件</div>
+    <div class="border-dashed">
+      <i class="el-icon-upload file-icon-upload"></i>
+      <div
+          class="el-upload__text file-drag-prompt"
+          v-if='!fileDragging'
+      >将文件拖到此处，或<em>点击上传</em></div>
+      <div class='file-drag-prompt' v-if='fileDragging'>在此处松开鼠标即可选择此文件</div>
+    </div>
   </div>
 </template>
 
@@ -96,22 +102,42 @@ export default {
   background-color: rgba(0, 0, 0, 0.2);
 }
 
+.file-icon-upload{
+  margin: 40px 0 16px;
+  left: 20px;
+  bottom: 20px;
+  right: 20px;
+  top: 40px;
+
+  font-size: 128px;
+  text-align: center;
+  border-radius:20px;
+  border-right: 20px;
+  position:fixed;
+}
 .file-drag-prompt{
+
+  left: 20px;
+  right: 20px;
+  top: 200px;
+  position:fixed;
+  /* padding-top: 20%; */
+  font-size: 32px;
+  text-align: center;
+
+}
+
+.border-dashed{
   margin: 20px;
 
   left: 20px;
   bottom: 20px;
   right: 20px;
   top: 20px;
-
-  /* padding-top: 20%; */
-  font-size: 64px;
-  text-align: center;
   border-radius:20px;
-  border-right: 20px;
   position:fixed;
   border-style:dashed;
-  border-width:10px;
-  border-color: rgba(0, 0, 0, 0.2);;
+  border-width:4px;
+  border-color: rgba(0, 0, 0, 0.2);
 }
 </style>

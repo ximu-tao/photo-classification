@@ -74,12 +74,13 @@ export default {
     , onKeyUp: function (e) {
       //  : 当按键被按下时, 判断按键并调用函数
       if (e.ctrlKey) {
-        try {
+        if ( e.key in this.controlKeyFun){
           this.controlKeyFun[e.key]()
-        } catch (err) {
-          console.debug(err);
         }
-      } else {
+        return;
+      }
+
+      if ( e.key in this.$store.getters.currentKeymap.keymap  ){
         let newPath = this.$store.getters.currentKeymap.keymap[e.key];
         if ( newPath ) {
           console.debug( this.$store.getters.currentImg, `将被移动至` , newPath )
@@ -93,17 +94,21 @@ export default {
                 this.$store.getters.currentImg , '的同名文件, 移动失败'
             )
           }
-
-        } else {
-          try {
-            this.switchImg[e.keyCode]();
-          } catch (error) {
-            console.debug(error);
-          }
         }
-
-
+        return
       }
+
+      if ( e.keyCode in this.switchImg ) {
+        try {
+          this.switchImg[e.keyCode]();
+        } catch (error) {
+          console.debug(error);
+        }
+        return;
+      }
+
+
+
     }
 
     , onMousewheel: function (e) {

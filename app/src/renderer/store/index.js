@@ -132,9 +132,9 @@ export default new Vuex.Store({
      * 读取 配置文件 , 初始化数据
      */
     init(context) {
-      console.log("Store init");
+      console.debug("Store init");
       readConfig().then((data) => {
-        console.log(data)
+        console.debug(data)
         context.commit('setKeymapList', parse(data).keymapList);
       });
     },

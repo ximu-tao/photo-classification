@@ -103,7 +103,6 @@ export default {
   methods: {
     deleteKeymap(){
       let currName = this.$store.getters.currentKeymap.configName;
-      // console.log( this.$store.getters.keymapList );
       if (window.confirm(`你确定要删除${currName}吗?`)) {
 
         this.$store.commit('deleteKeymap');
@@ -180,7 +179,7 @@ export default {
 
   },
   mounted() {
-    console.log( this.$store.getters.currentKeymap.keymap)
+    console.debug( this.$store.getters.currentKeymap.keymap)
   }
 
 }

@@ -37,9 +37,7 @@ export default {
     },
     onDrop: function (e) {
       //  :  拖拽文件后执行
-      // console.log('onDrop');
-      console.log(e.dataTransfer.files);
-      console.log(e.dataTransfer.files[0]);
+      console.debug(e.dataTransfer.files);
       this.fileSelected(e.dataTransfer.files[0].path);
     },
     selectFile: function () {
@@ -56,7 +54,7 @@ export default {
               buttonLabel: '选择此目录'
             }
         );
-        console.log(pathObjObj );
+        console.debug(pathObjObj );
         setTimeout( ()=>{
           this.opened = false;
         } , 0 );

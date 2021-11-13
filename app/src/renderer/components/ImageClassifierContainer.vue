@@ -77,7 +77,7 @@ export default {
         try {
           this.controlKeyFun[e.key]()
         } catch (err) {
-          console.log(err);
+          console.debug(err);
         }
       } else {
         let newPath = this.$store.getters.currentKeymap.keymap[e.key];
@@ -97,9 +97,8 @@ export default {
         } else {
           try {
             this.switchImg[e.keyCode]();
-            // console.log( this.currentImgIndex );
           } catch (error) {
-            console.log(error);
+            console.debug(error);
           }
         }
 
@@ -112,9 +111,7 @@ export default {
     }
     , onMousedown: function (e) {
       // TODO : 鼠标侧键
-
       // 为什么这里 e.preventDefault(); 后 , keyup 事件就不生效了呢?
-      // console.log( '鼠标侧键' );
     }
     , undo: function () {
       //  : 撤销文件移动

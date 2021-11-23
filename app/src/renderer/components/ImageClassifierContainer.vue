@@ -85,6 +85,12 @@ export default {
           moveFileTo(  this.$store.getters.currentImg , newPath);
           this.$store.dispatch('popCurrent' , newPath );
 
+          const h = this.$createElement;
+          this.$notify({
+            title: '移动成功',
+            message: h('i', { style: 'color: teal'}, `${this.$store.getters.currentImg}被移动至${newPath}` )
+          });
+
         }else{
           let msg = `${newPath} , '内存在' , ${ this.$store.getters.currentImg} 的同名文件, 移动失败`
           console.debug(  msg )

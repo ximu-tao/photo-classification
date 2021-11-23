@@ -69,41 +69,53 @@ export default {
     }
     , moveImg: function (oldImgIndex, newPath) {
 
+    },
+    specialFunctions( e ){
+      if ( e.key in this.controlKeyFun){
+        this.controlKeyFun[e.key]()
+      }
+      return;
+    },
+    moveImgFunctions(e){
+      let newPath = this.$store.getters.currentKeymap.keymap[e.key];
+      if ( newPath ) {
+        console.debug( this.$store.getters.currentImg, `将被移动至` , newPath )
+
+        if ( !exists( newPath , this.$store.getters.currentImg) ) {
+          moveFileTo(  this.$store.getters.currentImg , newPath);
+          this.$store.dispatch('popCurrent' , newPath );
+
+        }else{
+          console.debug(  newPath , '内存在' ,
+              this.$store.getters.currentImg , '的同名文件, 移动失败'
+          )
+        }
+      }
+      return
+    },
+    switchImgFunctions( e ){
+      try {
+        this.switchImg[e.keyCode]();
+      } catch (error) {
+        console.debug(error);
+      }
+      return;
     }
 
     , onKeyUp: function (e) {
       //  : 当按键被按下时, 判断按键并调用函数
       if (e.ctrlKey) {
-        if ( e.key in this.controlKeyFun){
-          this.controlKeyFun[e.key]()
-        }
+        this.specialFunctions(e);
         return;
       }
 
       if ( e.key in this.$store.getters.currentKeymap.keymap  ){
-        let newPath = this.$store.getters.currentKeymap.keymap[e.key];
-        if ( newPath ) {
-          console.debug( this.$store.getters.currentImg, `将被移动至` , newPath )
-
-          if ( !exists( newPath , this.$store.getters.currentImg) ) {
-            moveFileTo(  this.$store.getters.currentImg , newPath);
-            this.$store.dispatch('popCurrent' , newPath );
-
-          }else{
-            console.debug(  newPath , '内存在' ,
-                this.$store.getters.currentImg , '的同名文件, 移动失败'
-            )
-          }
-        }
-        return
+        this.moveImgFunctions(e);
+        return;
       }
 
       if ( e.keyCode in this.switchImg ) {
-        try {
-          this.switchImg[e.keyCode]();
-        } catch (error) {
-          console.debug(error);
-        }
+        this.switchImgFunctions(e);
         return;
       }
 

@@ -103,10 +103,18 @@ export default {
   methods: {
     deleteKeymap(){
       let currName = this.$store.getters.currentKeymap.configName;
-      if (window.confirm(`你确定要删除${currName}吗?`)) {
 
+      this.$confirm(`你确定要删除${currName}吗?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
         this.$store.commit('deleteKeymap');
-      }
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        });
+      });
 
     },
 

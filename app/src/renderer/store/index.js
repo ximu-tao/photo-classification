@@ -10,42 +10,117 @@ const parse = (text) => {
 export default new Vuex.Store({
   state: () => {
     return {
+      /**
+       * 方案列表
+       */
       __KeymapList: [],
+      /**
+       * 方案列表游标, 指向当前方案
+       */
       __KeymapPointer: 0,
+      /**
+       * 图像资源列表
+       */
       __ImgPathList: [],
+      /**
+       * 图像资源列表游标, 指向当前图片
+       */
       __ImgPointer: 0,
+      /**
+       * 已移动的图片栈, 用于撤销移动操作
+       */
       __MovedStack: [],
     }
   },
   getters: {
+    /**
+     * 方案列表
+     * @type {Object[]}
+     * @param state
+     * @return {Object[]}
+     */
     keymapList(state) {
       return state.__KeymapList;
     },
+    /**
+     * 方案列表
+     * @type {Object[]}
+     * @param state
+     * @return {Object[]}
+     */
     currentKeymap(state) {
       return state.__KeymapList[state.__KeymapPointer];
     },
+    /**
+     * 方案名列表
+     * @type {string[]}
+     * @param state
+     * @return {string[]}
+     */
     nameList(state) {
       return state.__KeymapList.map(v => v.configName);
     },
+    /**
+     * 当前图片路径
+     * @type {string}
+     * @param state
+     * @return {string}
+     */
     currentImg(state) {
       return state.__ImgPathList[state.__ImgPointer];
     },
+    /**
+     * 当前图片游标
+     * @type {int}
+     * @param state
+     * @return {int}
+     */
     currentImgIndex( state ){
       return state.__ImgPointer;
     },
+    /**
+     * 当前图像资源内的剩余数量
+     * @type {int}
+     * @param state
+     * @return {int}
+     */
     imgListSize( state ){
       return state.__ImgPathList.length;
     },
+    /**
+     * 当前图片游标, 指向当前图片
+     * @type {int}
+     * @param state
+     * @return {int}
+     */
     currentKeymapIndex( state ){
       return state.__KeymapPointer;
     },
+    /**
+     * 当前图像列表是否为空
+     * @type {boolean}
+     * @param state
+     * @return {boolean}
+     */
     isImgListEmpty( state ){
       // return true;
       return !state.__ImgPathList.length
     },
+    /**
+     * 上一个被移动的图片
+     * @type {string}
+     * @param state
+     * @return {string}
+     */
     lastMovedImg( state ){
       return state.__MovedStack[ state.__MovedStack.length-1 ]
     },
+    /**
+     * 方案模板
+     * @type {Object}
+     * @param state
+     * @return {Object}
+     */
     template( state ){
       return {
         keymap:{'0': '', '1': '', '2': '', '3': '', '4': '', '5': '', '6': '', '7': '', '8': '', '9': '', 'a': '', 'b': '', 'c': '', 'd': '', 'e': '', 'f': '', 'g': '', 'h': '', 'i': '', 'j': '', 'k': '', 'l': '', 'm': '', 'n': '', 'o': '', 'p': '', 'q': '', 'r': '', 's': '', 't': '', 'u': '', 'v': '', 'w': '', 'x': '', 'y': '', 'z': ''},
@@ -97,7 +172,11 @@ export default new Vuex.Store({
       console.debug("切换至上一张图片" , state.__ImgPointer ,
         state.__ImgPathList.length , state.__ImgPathList[state.__ImgPointer] );
     },
-
+    /**
+     * 相对与当前图像, 移动游标至第n个图像
+     * @param state
+     * @param n
+     */
     switchImg( state , n ){
       state.__ImgPointer += ( state.__ImgPathList.length + n );
       state.__ImgPointer %= state.__ImgPathList.length;
@@ -148,7 +227,7 @@ export default new Vuex.Store({
     },
 
     /**
-     *
+     * 将 当前图片 的路径移动至 __MovedStack, 并从 __ImgPathList 中移除 当前图片
      * @param context
      * @param newPath
      */

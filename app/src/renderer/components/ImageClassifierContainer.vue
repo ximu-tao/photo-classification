@@ -90,9 +90,11 @@ export default {
             this.$store.dispatch('popCurrent' , newPath );
 
           }else{
-            console.debug(  newPath , '内存在' ,
-                this.$store.getters.currentImg , '的同名文件, 移动失败'
-            )
+            let msg = `${newPath} , '内存在' , ${ this.$store.getters.currentImg} 的同名文件, 移动失败`
+            console.debug(  msg )
+
+            this.$message.error( msg );
+
           }
         }
         return

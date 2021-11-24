@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import {exists, moveFileTo, moveFileTo2 , readImgAsBase64} from "../util/lib";
+import {exists, moveFileTo, undoMoveFile , readImgAsBase64} from "../util/lib";
 import { remote, clipboard } from 'electron';
 
 
@@ -135,7 +135,7 @@ export default {
       //  : 撤销文件移动
 
       let moved = this.$store.getters.lastMovedImg;
-      moveFileTo2( moved.new , moved.old );
+      undoMoveFile( moved.new , moved.old );
       this.$store.dispatch( 'popLastMoved' );
     }
 

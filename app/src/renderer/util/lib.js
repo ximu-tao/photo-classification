@@ -118,7 +118,7 @@ const moveFileTo = ( filePath , newPath ) => {
  * @param {string} filePath 源文件的全路径, 不含文件名
  * @param {string} newPath 目标路径, 含文件名
  */
-const moveFileTo2 = ( filePath , newPath ) => {
+const undoMoveFile = ( filePath , newPath ) => {
   let fileName = path.basename( newPath );
   fs.renameSync( path.join( filePath , fileName ) , newPath );
 }
@@ -155,7 +155,7 @@ export default {
   listDir,
   checkType,
   moveFileTo,
-  moveFileTo2,
+  undoMoveFile,
   exists,
   readImgAsBase64,
 }
@@ -168,7 +168,7 @@ export {
   listDir,
   checkType,
   moveFileTo,
-  moveFileTo2,
+  undoMoveFile,
   exists,
   readImgAsBase64,
 }

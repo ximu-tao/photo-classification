@@ -6,7 +6,7 @@ import path from "path";
  * @param {string} pathName 文件路径
  * @returns {boolean} 是否为文件夹
  */
-export const isDir = (pathName)=> {
+const isDir = (pathName)=> {
   let stat = fs.lstatSync(pathName);
   return stat.isDirectory()
 }
@@ -24,7 +24,7 @@ const __ROOT_PATH = path.join(
  * 获取当前项目的根路径
  * @returns {string}
  */
-export const rootPath = ()=>{
+const rootPath = ()=>{
   return __ROOT_PATH;
 }
 
@@ -44,7 +44,7 @@ const newKeymap = "[{\"configName\":\"newConfig\",\"keymap\":{\"0\":\"\",\"1\":\
  * 异步读取配置文件, 返回 JSON 格式的配置项
  * @returns {Promise<string>}
  */
-export const readConfig = async ()=>{
+const readConfig = async ()=>{
   let data;
   console.log(  __CONFIG_PATH  )
   if (!fs.existsSync( __CONFIG_PATH )) {
@@ -64,7 +64,7 @@ export const readConfig = async ()=>{
  * @param config
  * @returns {Promise<void>}
  */
-export const saveConfigToFile = async ( config )=>{
+const saveConfigToFile = async ( config )=>{
   fs.writeFileSync(
     __CONFIG_PATH
     , JSON.stringify( config )
@@ -77,7 +77,7 @@ export const saveConfigToFile = async ( config )=>{
  * @param _path
  * @returns {string[]}
  */
-export const listDir = (_path ) => {
+const listDir = (_path ) => {
   if ( !isDir( _path ) ){
     _path = path.dirname( _path );
   }
@@ -96,7 +96,7 @@ const supportedTypes = ['.jpg', '.png', '.jpeg', '.gif', '.webp' , '.apng', '.bm
  * @param fileName
  * @returns {boolean}
  */
-export const checkType = ( fileName ) => {
+const checkType = ( fileName ) => {
   return !isDir(fileName) &&
     supportedTypes.indexOf( path.extname(fileName).toLowerCase()) !== -1 &&
     fs.existsSync(fileName)
@@ -108,7 +108,7 @@ export const checkType = ( fileName ) => {
  * @param filePath 源文件的全路径, 含文件名
  * @param newPath 目标路径
  */
-export const moveFileTo = ( filePath , newPath ) => {
+const moveFileTo = ( filePath , newPath ) => {
   let fileName = path.basename( filePath );
   fs.renameSync( filePath , path.join( newPath , fileName )  );
 }
@@ -118,7 +118,7 @@ export const moveFileTo = ( filePath , newPath ) => {
  * @param {string} filePath 源文件的全路径, 不含文件名
  * @param {string} newPath 目标路径, 含文件名
  */
-export const moveFileTo2 = ( filePath , newPath ) => {
+const moveFileTo2 = ( filePath , newPath ) => {
   let fileName = path.basename( newPath );
   fs.renameSync( path.join( filePath , fileName ) , newPath );
 }
@@ -130,7 +130,7 @@ export const moveFileTo2 = ( filePath , newPath ) => {
  * @param {string} fileName 文件名
  * @returns {boolean} 文件是否存在
  */
-export const exists = ( newPath , fileName ) =>{
+const exists = ( newPath , fileName ) =>{
   return fs.existsSync( path.join(
     newPath , path.basename( fileName )
   ) );
@@ -141,7 +141,34 @@ export const exists = ( newPath , fileName ) =>{
  * @param {string} path 图片路径
  * @returns {string} BASE64编码形式的图片
  */
-export const readImgAsBase64 = ( path )=>{
+const readImgAsBase64 = ( path )=>{
     let data = fs.readFileSync( path);
     return "data:image/jpg;base64," + data.toString('base64');
+}
+
+
+export default {
+  isDir,
+  rootPath,
+  readConfig,
+  saveConfigToFile,
+  listDir,
+  checkType,
+  moveFileTo,
+  moveFileTo2,
+  exists,
+  readImgAsBase64,
+}
+
+export {
+  isDir,
+  rootPath,
+  readConfig,
+  saveConfigToFile,
+  listDir,
+  checkType,
+  moveFileTo,
+  moveFileTo2,
+  exists,
+  readImgAsBase64,
 }

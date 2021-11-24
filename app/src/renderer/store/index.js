@@ -4,7 +4,16 @@ import {readConfig, listDir, checkType , saveConfigToFile } from "../util/lib.js
 
 Vue.use(Vuex)
 const parse = (text) => {
-  return {keymapList: JSON.parse(text)}
+  let jsonData = JSON.parse(text);
+  console.debug( jsonData );
+  if ( jsonData['keymapList'] === undefined ){
+    // 如果 keymapList 为空, 说明是 data-v2 版本的存储数据格式
+    console.debug( "存储数据格式版本 data-v2" )
+    return {keymapList: jsonData}
+  }
+
+  console.debug( "存储数据格式版本 data-v3" )
+  return jsonData;
 }
 
 export default new Vuex.Store({
@@ -201,7 +210,7 @@ export default new Vuex.Store({
         state.__KeymapPointer-=1;
       }
 
-      saveConfigToFile( state.__KeymapList );
+      saveConfigToFile( {keymapList: state.__KeymapList} );
     }
 
   },
@@ -213,8 +222,9 @@ export default new Vuex.Store({
     init(context) {
       console.debug("Store init");
       readConfig().then((data) => {
-        console.debug(data)
-        context.commit('setKeymapList', parse(data).keymapList);
+        console.debug(data);
+        let jsonData = parse(data);
+        context.commit('setKeymapList', jsonData.keymapList);
       });
     },
 
@@ -258,7 +268,7 @@ export default new Vuex.Store({
     alterCurrentKeymap( {state} , k ){
       state.__KeymapList[state.__KeymapPointer].configName = k.configName;
       state.__KeymapList[state.__KeymapPointer].keymap = k.keymap;
-      saveConfigToFile( state.__KeymapList );
+      saveConfigToFile( {keymapList: state.__KeymapList} );
     },
 
     /**
@@ -269,7 +279,7 @@ export default new Vuex.Store({
     addKeymap({state} , k ){
       state.__KeymapList.push( k );
       state.__KeymapPointer = state.__KeymapList.length-1;
-      saveConfigToFile( state.__KeymapList );
+      saveConfigToFile( {keymapList: state.__KeymapList} );
     }
   },
 

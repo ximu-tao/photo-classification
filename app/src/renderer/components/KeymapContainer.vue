@@ -10,24 +10,14 @@
         :class="{ 'keymap-container-canedit': canEdit , 'keymap-container-unedit': !canEdit }"
     >
       <div v-show="!canEdit">
-        <!--
-        使用临时变量无法在添加方案后切换到新的方案
-        使用 v-model='$store.getters' 无法双绑
-        使用 :values='$store.getters' 无法手动切换
-        暂时这样用, 以后想办法改
-         -->
-        <!--                @change='switchConfig'-->
-        <!-- TODO : 💩 : 不建议直接使用 $store.state.__KeymapPointer , 想办法使用其他方法完成双绑 -->
-        <select
-            v-model='$store.state.__KeymapPointer'
-        >
-          <option disabled selected= "selected" value="">请选择</option>
-          <option
-              v-for='( e , i ) in $store.getters.nameList'
-              :value='i' >
-            {{ e }}</option>
-
-        </select>
+        <el-select v-model="$store.state.__KeymapPointer" filterable placeholder="请选择">
+          <el-option
+              v-for="( e , i ) in $store.getters.nameList"
+              :key="e"
+              :label="e"
+              :value="i">
+          </el-option>
+        </el-select>
         <button @click='addConfig'>添加配置</button>
         <button @click='switchMinimize'>缩小</button>
 
@@ -103,10 +93,18 @@ export default {
   methods: {
     deleteKeymap(){
       let currName = this.$store.getters.currentKeymap.configName;
-      if (window.confirm(`你确定要删除${currName}吗?`)) {
 
+      this.$confirm(`你确定要删除${currName}吗?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
         this.$store.commit('deleteKeymap');
-      }
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        });
+      });
 
     },
 

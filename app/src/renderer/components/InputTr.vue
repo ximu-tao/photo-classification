@@ -7,7 +7,7 @@
       <input
           :style="[ styleObj ]"
           @change="onChange"
-          :value='img2path'
+          :value='localImg2Path'
           :disabled="!can_edit"
       />
     </td>
@@ -58,6 +58,33 @@ export default {
       } else {
         this.styleObj.backgroundColor = 'white'
         this.$emit('change', this.keypath, e.target.value)
+      }
+    }
+  },
+  computed:{
+    localImg2Path(){
+      if ( this.can_edit ){
+        return this.img2path;
+      }else {
+        if ( this.img2path.length !== 0){
+          let result = "";
+          let resultLen = 0;
+          for (let i = this.img2path.length-1; i > 0 && resultLen<=14; i--) {
+              let char = this.img2path[i];
+              result = char+result;
+              if ( "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopaasdfghjklzxcvbnbm1234567890/_\\".indexOf(char)){
+                resultLen+=1;
+              }else {
+                resultLen+=2;
+              }
+          }
+
+          // return  this.img2path.substring( this.img2path.length-15 )
+          return result;
+        }else {
+          return ""
+        }
+
       }
     }
   }

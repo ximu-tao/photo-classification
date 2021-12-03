@@ -7,13 +7,13 @@
       tabindex='-1'
       @contextmenu.prevent="popupMenu"
   >
-    <img :alt="$store.getters.currentImg" class="currentImg" v-show='isCurrentImg' :src="imgData">
+    <video class="currentImg" controls v-show='isCurrentImg' :src="imgData"></video>
 
   </div>
 </template>
 
 <script>
-import {exists, moveFileTo, undoMoveFile , readImgAsBase64} from "../util/lib";
+import {exists, moveFileTo, undoMoveFile } from "../util/lib";
 import { remote, clipboard } from 'electron';
 
 
@@ -151,16 +151,12 @@ export default {
   },
   computed: {
     imgData: function () {
-      let base64 = readImgAsBase64( this.$store.getters.currentImg );
-      let newImage = new Image();
-      newImage.src = base64;
-      newImage.onload = () => {
-        let title = `${this.$store.getters.currentImg} - [${ this.$store.getters.currentImgIndex+1 }/${ this.$store.getters.imgListSize }] ${newImage.width}:${newImage.height} - 图片分类`;
-        document.title = title;
-        console.debug( title );
-      }
 
-      return base64;
+      let title = `${this.$store.getters.currentImg} - [${ this.$store.getters.currentImgIndex+1 }/${ this.$store.getters.imgListSize }] - 视频分类`;
+      document.title = title;
+      console.debug( title );
+
+      return this.$store.getters.currentImg;
     }
   }
 

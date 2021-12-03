@@ -7,7 +7,7 @@
       tabindex='-1'
       @contextmenu.prevent="popupMenu"
   >
-    <video class="currentImg" controls v-show='isCurrentImg' :src="imgData"></video>
+    <video class="currentImg" muted autoplay loop controls v-show='isCurrentImg' :src="imgData"></video>
 
   </div>
 </template>

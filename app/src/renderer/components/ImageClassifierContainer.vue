@@ -151,16 +151,20 @@ export default {
   },
   computed: {
     imgData: function () {
-      let base64 = readImgAsBase64( this.$store.getters.currentImg );
+
+      let imgData = process.env.NODE_ENV === 'development'
+          ? readImgAsBase64( this.$store.getters.currentImg )
+          : this.$store.getters.currentImg;
+
       let newImage = new Image();
-      newImage.src = base64;
+      newImage.src = imgData;
       newImage.onload = () => {
         let title = `${this.$store.getters.currentImg} - [${ this.$store.getters.currentImgIndex+1 }/${ this.$store.getters.imgListSize }] ${newImage.width}:${newImage.height} - 图片分类`;
         document.title = title;
         console.debug( title );
       }
 
-      return base64;
+      return imgData;
     }
   }
 

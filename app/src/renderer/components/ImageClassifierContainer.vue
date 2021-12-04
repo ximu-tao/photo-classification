@@ -7,7 +7,7 @@
       tabindex='-1'
       @contextmenu.prevent="popupMenu"
   >
-    <video class="currentImg" muted autoplay loop controls v-show='isCurrentImg' :src="imgData"></video>
+    <video class="currentImg" :muted="isMuted" autoplay loop controls v-show='isCurrentImg' :src="imgData"></video>
 
   </div>
 </template>
@@ -22,6 +22,7 @@ export default {
   name: "ImageClassifierContainer",
   data() {
     return {
+      isMuted:true,
       isCurrentImg: true,
       switchImg: {
         '-1': this.previousImg,

@@ -7,7 +7,9 @@
       tabindex='-1'
       @contextmenu.prevent="popupMenu"
   >
-    <video class="currentImg" :muted="isMuted" autoplay loop controls v-show='isCurrentImg' :src="imgData"></video>
+    <div class="fullscreen">
+      <video class="currentImg" :muted="isMuted" autoplay loop controls v-show='isCurrentImg' :src="imgData"></video>
+    </div>
 
   </div>
 </template>
@@ -185,4 +187,22 @@ export default {
   background-color: #211f1f;
 
 }
+
+.fullscreen video {
+  position: fixed;
+  right: 0px;
+  bottom: 0px;
+  min-width: 100%;
+  min-height: 100%;
+  height: auto;
+  width: auto; /*加滤镜*/ /*-webkit-filter: grayscale(100%);*/ /*filter:grayscale(100%);*/
+}
+
+.fullscreen source {
+  min-width: 100%;
+  min-height: 100%;
+  height: auto;
+  width: auto;
+}
+
 </style>

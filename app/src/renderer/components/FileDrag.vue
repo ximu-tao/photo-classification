@@ -13,7 +13,7 @@
       <div
           class="el-upload__text file-drag-prompt"
           v-if='!fileDragging'
-      >将文件拖到此处，或<em>点击上传</em></div>
+      >拖拽到此，或<em>点击选择</em></div>
       <div class='file-drag-prompt' v-if='fileDragging'>在此处松开鼠标即可选择此文件</div>
     </div>
   </div>

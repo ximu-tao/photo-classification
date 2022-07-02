@@ -1,25 +1,26 @@
 <template>
   <div
-      class="img-container"
       @mousewheel.prevent="onMousewheel"
       @mousedown="onMousedown"
       @keyup.prevent="onKeyUp"
       tabindex='-1'
       @contextmenu.prevent="popupMenu"
   >
-    <img :alt="$store.getters.currentImg" class="currentImg" v-show='isCurrentImg' :src="imgData">
-
+<!--    <img :alt="$store.getters.currentImg" class="currentImg" v-show='isCurrentImg' :src="imgData">-->
+    <DisplayRack></DisplayRack>
   </div>
 </template>
 
 <script>
 import {exists, moveFileTo, undoMoveFile , readImgAsBase64} from "../util/lib";
 import { remote, clipboard } from 'electron';
+import DisplayRack from "./DisplayRack";
 
 
 
 export default {
   name: "ImageClassifierContainer",
+  components : { DisplayRack },
   data() {
     return {
       isCurrentImg: true,
@@ -173,23 +174,7 @@ export default {
 
 <style scoped>
 
-.currentImg{
-  text-align: center;
-  max-width: 100%;
-  max-height: 100%;
-  display:block;
-  z-index: 100;
-  margin: 0 auto;
-}
 
-.img-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  /* overflow: hidden; */
-  background-color: #211f1f;
 
-}
+
 </style>

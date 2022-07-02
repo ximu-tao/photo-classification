@@ -1,5 +1,5 @@
 {
-  "name": "photo-classification",
+  "name": "video-classification",
   "version": "4.0.0",
   "author": "ximu-tao <me_litao@outlook.com>",
   "description": "An electron-vue project",
@@ -17,8 +17,8 @@
     "postinstall": ""
   },
   "build": {
-    "productName": "photo-classification",
-    "appId": "com.outlook.me_litao.photo-classification",
+    "productName": "video-classification",
+    "appId": "com.outlook.me_litao.video-classification",
     "directories": {
       "output": "build"
     },

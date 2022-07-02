@@ -13,7 +13,7 @@
   import KeymapContainer from "./components/KeymapContainer";
 
   export default {
-    name: 'photo-classification',
+    name: 'video-classification',
     components: {
       FileDrag,ImageClassifierContainer,KeymapContainer
     },

@@ -46,13 +46,13 @@ const newKeymap = "[{\"configName\":\"newConfig\",\"keymap\":{\"0\":\"\",\"1\":\
  */
 const readConfig = async ()=>{
   let data;
-  console.log(  __CONFIG_PATH  )
+  console.debug(  __CONFIG_PATH  )
   if (!fs.existsSync( __CONFIG_PATH )) {
-    console.log( "__CONFIG_PATH 文件不存在 , 将使用默认配置");
+    console.debug( "__CONFIG_PATH 文件不存在 , 将使用默认配置");
     data = newKeymap;
     // this.setConfigFile();
   }else {
-    console.log( "__CONFIG_PATH 文件存在 , 将使用该配置");
+    console.debug( "__CONFIG_PATH 文件存在 , 将使用该配置");
 
     data = fs.readFileSync( __CONFIG_PATH, 'utf-8');
   }
@@ -89,7 +89,29 @@ const listDir = (_path ) => {
  * 受支持的文件类型, 全部小写
  * @type {string[]}
  */
-const supportedTypes = ['.jpg', '.png', '.jpeg', '.gif', '.webp' , '.apng', '.bmp' , '.ico', '.cur' , '.jfif', '.pjpeg', '.pjp', '.svg'];
+const supportedTypes = [ ".mp4" , ".webm"  ,'.jpg', '.png', '.jpeg', '.gif', '.webp' , '.apng', '.bmp' , '.ico', '.cur' , '.jfif', '.pjpeg', '.pjp', '.svg'];
+
+
+const imgTypes = ['.jpg', '.png', '.jpeg', '.gif', '.webp' , '.apng', '.bmp' , '.ico', '.cur' , '.jfif', '.pjpeg', '.pjp', '.svg'];
+
+/**
+ * 通过后缀名判断文件是否是一个图片文件
+ * @param fileName
+ * @returns {boolean}
+ */
+const isImg = ( fileName ) => {
+  return imgTypes.indexOf( path.extname(fileName).toLowerCase()) !== -1
+}
+
+const videoTypes = [".mp4" , ".webm" ];
+/**
+ * 通过后缀名判断文件是否是一个视频文件
+ * @param fileName
+ * @returns {boolean}
+ */
+const isVideo = ( fileName ) => {
+  return videoTypes.indexOf( path.extname(fileName).toLowerCase()) !== -1
+}
 
 /**
  * 判断文件是否受支持
@@ -171,4 +193,6 @@ export {
   undoMoveFile,
   exists,
   readImgAsBase64,
+  isVideo,
+  isImg,
 }

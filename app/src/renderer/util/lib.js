@@ -46,13 +46,13 @@ const newKeymap = "[{\"configName\":\"newConfig\",\"keymap\":{\"0\":\"\",\"1\":\
  */
 const readConfig = async ()=>{
   let data;
-  console.log(  __CONFIG_PATH  )
+  console.debug(  __CONFIG_PATH  )
   if (!fs.existsSync( __CONFIG_PATH )) {
-    console.log( "__CONFIG_PATH 文件不存在 , 将使用默认配置");
+    console.debug( "__CONFIG_PATH 文件不存在 , 将使用默认配置");
     data = newKeymap;
     // this.setConfigFile();
   }else {
-    console.log( "__CONFIG_PATH 文件存在 , 将使用该配置");
+    console.debug( "__CONFIG_PATH 文件存在 , 将使用该配置");
 
     data = fs.readFileSync( __CONFIG_PATH, 'utf-8');
   }

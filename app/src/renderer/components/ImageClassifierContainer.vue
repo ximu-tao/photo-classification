@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import {exists, moveFileTo, undoMoveFile , readImgAsBase64} from "../util/lib";
+import {exists, moveFileTo, undoMoveFile } from "../util/lib";
 import { remote, clipboard } from 'electron';
 import DisplayRack from "./DisplayRack";
 
@@ -151,22 +151,7 @@ export default {
 
   },
   computed: {
-    imgData: function () {
 
-      let imgData = process.env.NODE_ENV === 'development'
-          ? readImgAsBase64( this.$store.getters.currentImg )
-          : this.$store.getters.currentImg;
-
-      let newImage = new Image();
-      newImage.src = imgData;
-      newImage.onload = () => {
-        let title = `${this.$store.getters.currentImg} - [${ this.$store.getters.currentImgIndex+1 }/${ this.$store.getters.imgListSize }] ${newImage.width}:${newImage.height} - 图片分类`;
-        document.title = title;
-        console.debug( title );
-      }
-
-      return imgData;
-    }
   }
 
 }

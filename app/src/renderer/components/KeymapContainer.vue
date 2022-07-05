@@ -31,7 +31,7 @@
         <tr><th><kbd>按键</kbd></th><th>目录</th>
         </tr>
         <tr
-            v-show="!canEdit"
+            v-show="(!canEdit) && (val!='')"
             is='input-tr'
             v-for='(val, key) in $store.getters.currentKeymap.keymap'
             :img2path='val'

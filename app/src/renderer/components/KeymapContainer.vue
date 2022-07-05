@@ -1,7 +1,9 @@
 <template>
   <div class='keymap-father'>
-    <div class="minimize-container" v-if='isMinimize'>
-      <input type='button' @click='switchMinimize' value='展开'>
+    <div class="minimize-container" v-if="!canEdit">
+<!--      <el-button size="mini" v-if='isMinimize' @click='switchMinimize' round class="el-icon-zoom-in">展开</el-button>-->
+<!--      <el-button size="mini" v-if='!isMinimize' @click='switchMinimize' round class="el-icon-zoom-out">缩小</el-button>-->
+      <el-button size="mini" @click='switchMinimize' round :class="{ 'el-icon-zoom-in':isMinimize , 'el-icon-zoom-out':!isMinimize }">{{ isMinimize ? '展开' : '缩小'}}</el-button>
     </div>
 
     <div
@@ -9,6 +11,8 @@
         class='keymap-container'
         :class="{ 'keymap-container-canedit': canEdit , 'keymap-container-unedit': !canEdit }"
     >
+
+      <el-button size="mini" @click='addConfig'  v-show="!canEdit" round class="float-right  el-icon-document-add">添加配置</el-button>
       <div v-show="!canEdit">
         <el-select v-model="$store.state.__KeymapPointer" filterable placeholder="请选择">
           <el-option
@@ -18,8 +22,6 @@
               :value="i">
           </el-option>
         </el-select>
-        <button @click='addConfig'>添加配置</button>
-        <button @click='switchMinimize'>缩小</button>
 
       </div>
       <div v-show="addingConfig">
@@ -52,19 +54,16 @@
             @change='onChange'
         ></tr>
 
-
-        <tr v-if='canEdit'>
-          <td><input type='button' @click='save' value='保存'></td>
-          <td><input type='button' @click='cancelEdit' value='取消'></td>
-        </tr>
-
-        <tr v-if='!canEdit'>
-          <td></td>
-          <td><input type='button' @click='startEdit' value='修改方案'>
-            <input type='button' @click='deleteKeymap' value='删除方案'></td>
-        </tr>
-
       </table>
+
+      <div v-if='canEdit'>
+        <el-button size="mini" @click='save' class="el-icon-circle-check" round>保存</el-button>
+        <el-button size="mini" @click='cancelEdit' class="el-icon-circle-close" round>取消</el-button>
+      </div>
+      <div v-show='!canEdit'>
+        <el-button size="mini" @click='startEdit' class="el-icon-edit" round>修改方案</el-button>
+        <el-button size="mini" @click='deleteKeymap' class="el-icon-delete" round>删除方案</el-button>
+      </div>
     </div>
   </div>
 </template>
@@ -185,7 +184,7 @@ export default {
 
 <style scoped>
 .keymap-container{
-  z-index: 100;
+  z-index: 99;
   top: 0px;
   left: 0px;
   height: 100%;
@@ -197,6 +196,10 @@ export default {
   z-index: 100;
   position: absolute;
   left: 0px;
-  bottom: 0px;
+  top: 0px;
+}
+
+.float-right{
+  float: right;
 }
 </style>

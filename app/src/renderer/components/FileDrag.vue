@@ -9,12 +9,12 @@
       @click="selectFile"
   >
     <div class="border-dashed">
-      <i class="el-icon-upload file-icon-upload"></i>
+      <i class="el-icon-folder-opened file-icon-upload"></i>
       <div
           class="el-upload__text file-drag-prompt"
           v-if='!fileDragging'
       >拖拽到此，或<em>点击选择</em></div>
-      <div class='file-drag-prompt' v-if='fileDragging'>在此处松开鼠标即可选择此文件</div>
+      <div class='file-drag-prompt' v-if='fileDragging'>松开鼠标选择此文件</div>
     </div>
   </div>
 </template>

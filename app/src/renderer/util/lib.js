@@ -29,13 +29,33 @@ const rootPath = ()=>{
 }
 
 /**
+ * 用户程序文件目录
+ * @type {string}
+ */
+const __APPDATA_PATH = process.env.APPDATA || (process.platform == 'darwin' ? process.env.HOME + '/Library/Preferences' : process.env.HOME + "/.local/share")
+
+const APP_CONFIG_PATH = path.join( __ROOT_PATH  , 'config.json')
+const USERDATA_CONFIG_PATH = path.join( __APPDATA_PATH , 'photo-classification-config' , 'config.json')
+
+/**
  * 配置文件的路径
  * @type {string}
  * @private
  */
-const __CONFIG_PATH = path.join(
-  rootPath() , './config.json'
-);
+let __CONFIG_PATH = ""
+
+const hasConfig = ()=>{
+  if ( fs.existsSync( APP_CONFIG_PATH ) ){
+    __CONFIG_PATH = APP_CONFIG_PATH
+  }
+
+  if ( fs.existsSync( USERDATA_CONFIG_PATH ) ){
+    __CONFIG_PATH = USERDATA_CONFIG_PATH
+  }
+
+  return Boolean(__CONFIG_PATH)
+}
+
 
 // 第一次使用此软件, 会使用这个做配置文件模板
 const newKeymap = "[{\"configName\":\"newConfig\",\"keymap\":{\"0\":\"\",\"1\":\"\",\"2\":\"\",\"3\":\"\",\"4\":\"\",\"5\":\"\",\"6\":\"\",\"7\":\"\",\"8\":\"\",\"9\":\"\",\"a\":\"\",\"b\":\"\",\"c\":\"\",\"d\":\"\",\"e\":\"\",\"f\":\"\",\"g\":\"\",\"h\":\"\",\"i\":\"\",\"j\":\"\",\"k\":\"\",\"l\":\"\",\"m\":\"\",\"n\":\"\",\"o\":\"\",\"p\":\"\",\"q\":\"\",\"r\":\"\",\"s\":\"\",\"t\":\"\",\"u\":\"\",\"v\":\"\",\"w\":\"\",\"x\":\"\",\"y\":\"\",\"z\":\"\"}}]"
@@ -47,7 +67,7 @@ const newKeymap = "[{\"configName\":\"newConfig\",\"keymap\":{\"0\":\"\",\"1\":\
  */
 const readConfig = async ( configPath=__CONFIG_PATH )=>{
   let data;
-  if ( configPath ){
+  if ( !configPath ){
     configPath=__CONFIG_PATH
   }
   console.debug(  configPath  )
@@ -64,6 +84,17 @@ const readConfig = async ( configPath=__CONFIG_PATH )=>{
   return data;
 }
 
+let mkdirsSync = (dirname) =>{
+  if (fs.existsSync(dirname)) {
+    return true;
+  } else {
+    if (mkdirsSync(path.dirname(dirname))) {
+      fs.mkdirSync(dirname);
+      return true;
+    }
+  }
+}
+
 /**
  * 将新的配置信息保存至文件
  * @param config
@@ -71,9 +102,10 @@ const readConfig = async ( configPath=__CONFIG_PATH )=>{
  * @returns {Promise<void>}
  */
 const saveConfigToFile = async ( config , configPath =__CONFIG_PATH)=>{
-  if ( configPath ){
+  if ( !configPath ){
     configPath=__CONFIG_PATH
   }
+  mkdirsSync( path.dirname( configPath )  )
   fs.writeFileSync(
     configPath
     , JSON.stringify( config )
@@ -213,4 +245,7 @@ export {
   readImgAsBase64,
   isVideo,
   isImg,
+  hasConfig,
+  APP_CONFIG_PATH,
+  USERDATA_CONFIG_PATH,
 }

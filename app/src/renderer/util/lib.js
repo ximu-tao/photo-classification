@@ -42,19 +42,24 @@ const newKeymap = "[{\"configName\":\"newConfig\",\"keymap\":{\"0\":\"\",\"1\":\
 
 /**
  * 异步读取配置文件, 返回 JSON 格式的配置项
+ * @param configPath
  * @returns {Promise<string>}
  */
-const readConfig = async ()=>{
+const readConfig = async ( configPath=__CONFIG_PATH )=>{
   let data;
-  console.debug(  __CONFIG_PATH  )
-  if (!fs.existsSync( __CONFIG_PATH )) {
-    console.debug( "__CONFIG_PATH 文件不存在 , 将使用默认配置");
+  if ( configPath ){
+    configPath=__CONFIG_PATH
+  }
+  console.debug(  configPath  )
+
+  if (!fs.existsSync( configPath )) {
+    console.debug( `${configPath} 文件不存在 , 将使用默认配置`);
     data = newKeymap;
     // this.setConfigFile();
   }else {
-    console.debug( "__CONFIG_PATH 文件存在 , 将使用该配置");
+    console.debug( `${configPath} 文件存在 , 将使用该配置` );
 
-    data = fs.readFileSync( __CONFIG_PATH, 'utf-8');
+    data = fs.readFileSync( configPath, 'utf-8');
   }
   return data;
 }
@@ -62,11 +67,15 @@ const readConfig = async ()=>{
 /**
  * 将新的配置信息保存至文件
  * @param config
+ * @param configPath
  * @returns {Promise<void>}
  */
-const saveConfigToFile = async ( config )=>{
+const saveConfigToFile = async ( config , configPath =__CONFIG_PATH)=>{
+  if ( configPath ){
+    configPath=__CONFIG_PATH
+  }
   fs.writeFileSync(
-    __CONFIG_PATH
+    configPath
     , JSON.stringify( config )
   );
 }

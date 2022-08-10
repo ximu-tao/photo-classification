@@ -95,13 +95,22 @@ const listDir = (_path ) => {
 }
 
 /**
- * 受支持的文件类型, 全部小写
+ * 受支持的图片文件后缀名, 全部小写
  * @type {string[]}
  */
-const supportedTypes = [ ".mp4" , ".webm"  ,'.jpg', '.png', '.jpeg', '.gif', '.webp' , '.apng', '.bmp' , '.ico', '.cur' , '.jfif', '.pjpeg', '.pjp', '.svg'];
-
-
 const imgTypes = ['.jpg', '.png', '.jpeg', '.gif', '.webp' , '.apng', '.bmp' , '.ico', '.cur' , '.jfif', '.pjpeg', '.pjp', '.svg'];
+
+/**
+ * 受支持的视频文件后缀名, 全部小写
+ * @type {string[]}
+ */
+const videoTypes = [".mp4" , ".webm" ];
+
+/**
+ * 受支持的文件后缀名, 全部小写
+ * @type {string[]}
+ */
+const supportedTypes = [ ...imgTypes , ...videoTypes];
 
 /**
  * 通过后缀名判断文件是否是一个图片文件
@@ -112,7 +121,7 @@ const isImg = ( fileName ) => {
   return imgTypes.indexOf( path.extname(fileName).toLowerCase()) !== -1
 }
 
-const videoTypes = [".mp4" , ".webm" ];
+
 /**
  * 通过后缀名判断文件是否是一个视频文件
  * @param fileName

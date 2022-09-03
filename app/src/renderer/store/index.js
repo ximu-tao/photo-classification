@@ -28,6 +28,10 @@ export default new Vuex.Store({
        */
       __KeymapPointer: 0,
       /**
+       * 方案列表游标, 指向一个基本方案
+       */
+      __BasicPointer:0,
+      /**
        * 图像资源列表
        */
       __ImgPathList: [],
@@ -59,6 +63,9 @@ export default new Vuex.Store({
      */
     currentKeymap(state) {
       return state.__KeymapList[state.__KeymapPointer];
+    },
+    basicKeymap(state){
+      return state.__KeymapList[state.__BasicPointer];
     },
     /**
      * 方案名列表

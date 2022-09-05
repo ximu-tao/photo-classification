@@ -28,9 +28,13 @@ export default new Vuex.Store({
        */
       __KeymapPointer: 0,
       /**
-       * 方案列表游标, 指向一个基本方案
+       * 全局基本方案列表游标, 指向一个基本方案
        */
       __BasicPointer:0,
+      /**
+       * 是否启用全局基本方案
+       */
+      __isEnabledBasicPointer:false,
       /**
        * 图像资源列表
        */
@@ -65,7 +69,7 @@ export default new Vuex.Store({
       return state.__KeymapList[state.__KeymapPointer];
     },
     basicKeymap(state){
-      return state.__KeymapList[state.__BasicPointer];
+      return { "enabled":state.__isEnabledBasicPointer , "data":state.__KeymapList[state.__BasicPointer] } ;
     },
     /**
      * 方案名列表

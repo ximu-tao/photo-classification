@@ -80,26 +80,44 @@ export default {
     moveImgFunctions(e){
       let newPath = this.$store.getters.currentKeymap.keymap[e.key];
       if ( newPath ) {
-        console.debug( this.$store.getters.currentImg, `将被移动至` , newPath )
-
-        if ( !exists( newPath , this.$store.getters.currentImg) ) {
-          moveFileTo(  this.$store.getters.currentImg , newPath);
-          this.$store.dispatch('popCurrent' , newPath );
-
-          const h = this.$createElement;
-          this.$notify({
-            title: '移动成功',
-            message: h('i', { style: 'color: teal'}, `${this.$store.getters.currentImg}被移动至${newPath}` )
-          });
-
-        }else{
-          let msg = `${newPath} , '内存在' , ${ this.$store.getters.currentImg} 的同名文件, 移动失败`
-          console.debug(  msg )
-
-          this.$message.error( msg );
-        }
+        console.debug( e.key , "在当前方案中获取到目标目录" )
+        this.moveTo( newPath );
+        return;
       }
-      return
+      if ( this.$store.getters.basicKeymap['enabled'] ){
+
+        console.debug( e.key , "在当前方案中未定义目标目录, 将尝试在基础方案中获取目录" )
+        newPath = this.$store.getters.basicKeymap['data'].keymap[e.key];
+        if ( newPath ) {
+          console.debug( e.key , "在基础方案中获取到目录" )
+          this.moveTo( newPath );
+          return;
+        }else {
+          console.debug( e.key , "当前方案和基础方案中未定义目标目录" )
+        }
+      }else{
+        console.debug( e.key , "未启用基础方案功能" )
+      }
+    },
+    moveTo( newPath ){
+      console.debug( this.$store.getters.currentImg, `将被移动至` , newPath )
+
+      if ( !exists( newPath , this.$store.getters.currentImg) ) {
+        moveFileTo(  this.$store.getters.currentImg , newPath);
+        this.$store.dispatch('popCurrent' , newPath );
+
+        const h = this.$createElement;
+        this.$notify({
+          title: '移动成功',
+          message: h('i', { style: 'color: teal'}, `${this.$store.getters.currentImg}被移动至${newPath}` )
+        });
+
+      }else{
+        let msg = `${newPath} , '内存在' , ${ this.$store.getters.currentImg} 的同名文件, 移动失败`
+        console.debug(  msg )
+
+        this.$message.error( msg );
+      }
     },
     switchImgFunctions( e ){
       try {

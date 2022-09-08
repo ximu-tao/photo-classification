@@ -14,8 +14,21 @@
 
       <div class="tip">一些软件的全局设置</div>
       <el-collapse>
-        <el-collapse-item title="实验性功能" name="1">
-
+        <el-collapse-item title="实验性功能 - 全局基础方案" name="1">
+          启用全局基础方案功能
+          <el-switch
+              v-model="$store.state.__isEnabledBasicPointer"
+              active-color="#13ce66"
+              inactive-color="#ff4949">
+          </el-switch>
+          <el-select v-model="$store.state.__BasicPointer" :disabled="!$store.state.__isEnabledBasicPointer">
+            <el-option
+                v-for="( e , i ) in $store.getters.nameList"
+                :key="e"
+                :label="e"
+                :value="i">
+            </el-option>
+          </el-select>
         </el-collapse-item>
 
       </el-collapse>

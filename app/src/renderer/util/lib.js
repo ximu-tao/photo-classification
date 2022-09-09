@@ -139,6 +139,12 @@ const imgTypes = ['.jpg', '.png', '.jpeg', '.gif', '.webp' , '.apng', '.bmp' , '
 const videoTypes = [".mp4" , ".webm" ];
 
 /**
+ * 受支持的音频文件后缀名, 全部小写
+ * @type {string[]}
+ */
+const audioTypes = [".mp3" , ".aac" , ".wav" ];
+
+/**
  * 受支持的文件后缀名, 全部小写
  * @type {string[]}
  */

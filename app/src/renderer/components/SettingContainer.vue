@@ -8,8 +8,8 @@
     <el-dialog
         title="设 置"
         :visible.sync="settingVisible"
-        fullscreen="true"
-        show-close="false"
+        :fullscreen="true"
+        :show-close="false"
     >
 
       <div class="tip">一些软件的全局设置</div>

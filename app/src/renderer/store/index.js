@@ -146,6 +146,12 @@ export default new Vuex.Store({
         keymap:{'0': '', '1': '', '2': '', '3': '', '4': '', '5': '', '6': '', '7': '', '8': '', '9': '', 'a': '', 'b': '', 'c': '', 'd': '', 'e': '', 'f': '', 'g': '', 'h': '', 'i': '', 'j': '', 'k': '', 'l': '', 'm': '', 'n': '', 'o': '', 'p': '', 'q': '', 'r': '', 's': '', 't': '', 'u': '', 'v': '', 'w': '', 'x': '', 'y': '', 'z': ''},
         configName : "newConfig"
       }
+    },
+    serialize( state ){
+      return {
+        keymapList: state.__KeymapList ,
+        basicKeymap:{  "enabled":state.__isEnabledBasicPointer , "data":state.__BasicPointer }
+      }
     }
   },
   mutations: {
@@ -221,7 +227,10 @@ export default new Vuex.Store({
         state.__KeymapPointer-=1;
       }
 
-      saveConfigToFile( {keymapList: state.__KeymapList} );
+      saveConfigToFile( {
+        keymapList: state.__KeymapList ,
+        basicKeymap:{  "enabled":state.__isEnabledBasicPointer , "data":state.__BasicPointer }
+      } );
     }
 
   },
@@ -235,7 +244,12 @@ export default new Vuex.Store({
       readConfig().then((data) => {
         console.debug(data);
         let jsonData = parse(data);
-        context.commit('setKeymapList', jsonData.keymapList);
+        context.state.__KeymapList = jsonData.keymapList;
+        if ( "basicKeymap" in jsonData){
+          context.state.__isEnabledBasicPointer = jsonData.basicKeymap['enabled'];
+          context.state.__BasicPointer = jsonData.basicKeymap['data'];
+        }
+        // context.commit('setKeymapList', );
       });
     },
 
@@ -273,24 +287,27 @@ export default new Vuex.Store({
 
     /**
      * 修改当前按键方案或方案名
+     * @param getters
      * @param state
      * @param k:{ configName , keymap }
      */
-    alterCurrentKeymap( {state} , k ){
+    alterCurrentKeymap( {getters,state} , k ){
       state.__KeymapList[state.__KeymapPointer].configName = k.configName;
       state.__KeymapList[state.__KeymapPointer].keymap = k.keymap;
-      saveConfigToFile( {keymapList: state.__KeymapList} );
+      saveConfigToFile( getters.serialize );
     },
 
     /**
      * 添加一个按键方案
+     * @param getters
      * @param state
      * @param k:{ configName , keymap }
      */
-    addKeymap({state} , k ){
+    addKeymap({ getters , state} , k ){
+
       state.__KeymapList.push( k );
       state.__KeymapPointer = state.__KeymapList.length-1;
-      saveConfigToFile( {keymapList: state.__KeymapList} );
+      saveConfigToFile( getters.serialize );
     }
   },
 
